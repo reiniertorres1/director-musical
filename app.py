@@ -17,11 +17,42 @@ perfiles = {
         "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, no belting, NO robotic voice, NO crowd, NO audience",
         "letra_template": "[Verse 1]\n(Escribe 4 versos íntimos)\n\n[Pre-Chorus]\n(Escribe 2 versos subiendo la emoción)\n\n[Chorus]\n(Escribe 4 versos con la melodía principal)\n\n[Verse 2]\n(Escribe 4 versos continuando la historia)\n\n[Chorus]\n(Repite el coro principal)\n\n[Bridge]\n(Puente musical y lírico con cambio de acordes)\n\n[Guitar Solo]\n\n[Chorus]\n(Último coro con toda la emoción, modulación hacia arriba)\n\n[End]\n(Terminar en seco, corte limpio)"
     },
-    "Timba Cubana (Estilo Mandy Cantero)": {
-        "style": "authentic cuban timba, pristine studio production, organic songo groove, studio acoustic drum kit, real brass section, acoustic trumpets, progressive harmony, harmonic modulation, baby bass tumbao, natural studio vocals, expressive melodic sonero, NO synth brass, NO midi horns, NO robotic voice, NO crowd, NO audience, NO live performance",
-        "letra_template": "[Intro]\n(Arreglo musical de metales reales, sin voz)\n\n[Verse 1]\n(CANTADO: Historia clara, estilo crónica urbana)\n\n[Pre-Chorus]\n(CANTADO: Subiendo la intensidad armónica)\n\n[Chorus 1]\n(CANTADO: Coro principal, melódico y con peso)\n\n[Drum Break]\n(Corte de batería estilo songo para preparar los metales)\n\n[Mambo]\n(Instrumental: sección de metales agresiva y real)\n\n[Verse 2]\n(CANTADO: Continúa la historia)\n\n[Chorus 1]\n(Repite el coro melódico)\n\n[Soneo]\n(CANTADO: Improvisación melódica y afinada)\n\n[Bridge: Key Change]\n(CANTADO: Puente lírico forzando una modulación armónica, cambia la melodía por completo)\n\n[Chorus 2]\n(CANTADO: Un coro más corto y directo)\n\n[Soneo]\n(CANTADO: Diálogo directo respondiendo al coro)\n\n[Micro-Chorus]\n(CANTADO: Coro de una sola frase cortísima que se repite rítmicamente)\n\n[Moña]\n(Contrapunto intenso de trompetas acústicas)\n\n[Soneo]\n(CANTADO: Remate final melódico)\n\n[End]\n(Corte musical limpio y contundente)"
-    }
-}
+    "Timba Cubana (Explosiva para el bailador)": {
+            "style": "authentic cuban timba, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, live studio sound",
+            "letra_template": """[Intro Tumbao y Metales]
+(Arranca con fuerza, metales arriba, piano y percusión)
+
+[Verse 1]
+(Cuerpo del tema: Solo 4 líneas contando la historia directo al grano)
+
+[Coro 1]
+(Coro principal, pegadizo y claro)
+
+[Soneo]
+Guía: (Pregón corto con buenos dicharachos de la calle. Recuerda: NADA de onomatopeyas literales)
+
+[Mambo 1]
+(Instrumental: Primer arreglo de metales, bailable y sabroso)
+
+[Coro 2]
+Coro: (Un coro nuevo, más picante y corto)
+Guía: (Soneo tirando pulla al ritmo del bajo)
+Coro: (Repite el coro 2)
+
+[Mambo 2 - Agresivo]
+(Instrumental: Cambio en los metales, trompetas altas y trombones a reventar)
+
+[Efecto - Bloque Rítmico]
+(Corte seco de la banda entera)
+
+[Bomba y Masacote]
+(Cae el piano machacando, bajo pesado, energía al máximo)
+Coro: (Coro explosivo de 2 líneas)
+Guía: (Soneo final con toda la bomba)
+
+[Mambo 3 - Cierre]
+(Metales finales a fuego y cierre con bloque seco)"""
+        },
 
 # Interfaz de usuario
 st.subheader("Configura tu canción")
