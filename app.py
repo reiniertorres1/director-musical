@@ -4,7 +4,8 @@ import google.generativeai as genai
 # =========================================================
 # 1. PEGA TU API KEY AQUÍ ADENTRO (ENTRE LAS COMILLAS)
 # =========================================================
-MI_API_KEY = "AQ.Ab8RN6LlU-5d_oicAjFd1EHKxCYuNAHuW1NOPiaB1TuRuOYbvg"
+# Configuración segura usando los Secrets de Streamlit
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 # Configuración de la página para móviles
 st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
