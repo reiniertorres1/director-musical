@@ -14,12 +14,39 @@ st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 # Diccionario de perfiles definitivo: Calidad de estudio, modulación y soneos melódicos.
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel)": {
-        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, no belting, NO robotic voice, NO crowd, NO audience",
-        "letra_template": "[Verse 1]\n(Escribe 4 versos íntimos)\n\n[Pre-Chorus]\n(Escribe 2 versos subiendo la emoción)\n\n[Chorus]\n(Escribe 4 versos con la melodía principal)\n\n[Verse 2]\n(Escribe 4 versos continuando la historia)\n\n[Chorus]\n(Repite el coro principal)\n\n[Bridge]\n(Puente musical y lírico con cambio de acordes)\n\n[Guitar Solo]\n\n[Chorus]\n(Último coro con toda la emoción, modulación hacia arriba)\n\n[End]\n(Terminar en seco, corte limpio)"
+        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, gentle whisper, no belting, NO robotic voice, NO crowd, NO audience",
+        "letra_template": """[Intro Orquestal]
+(Cuerdas románticas y piano suave. Atmósfera íntima)
+
+[Verse 1 - Soft Vocals]
+(Canta con voz aterciopelada y casi susurrada. Escribe 4 versos íntimos)
+
+[Pre-Chorus - Gentle]
+(Sube la emoción de la orquesta, pero la voz se mantiene controlada y romántica. Escribe 2 versos)
+
+[Chorus - No Belting]
+(Coro amplio, instrumentación rica, voz con mucho sentimiento pero SIN gritar. Escribe 4 versos con la melodía principal)
+
+[Verse 2 - Intimate]
+(Vuelve a la intimidad, voz suave y cercana contando el resto de la historia. Escribe 4 versos)
+
+[Chorus - No Belting]
+(Repite el coro con más instrumentación, cuerdas majestuosas, voz cálida)
+
+[Bridge]
+(Puente musical y lírico con cambio de acordes. Voz expresiva pero contenida)
+
+[Guitar Solo]
+
+[Chorus - Emotional but smooth]
+(Último coro con toda la emoción, modulación hacia arriba, pero manteniendo el control vocal)
+
+[Outro]
+(Voz susurrada finalizando el tema, cuerdas desvaneciéndose lentamente, terminar en seco)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
-            "style": "authentic cuban timba, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, live studio sound",
-            "letra_template": """[Intro Tumbao y Metales]
+        "style": "authentic cuban timba, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, live studio sound",
+        "letra_template": """[Intro Tumbao y Metales]
 (Arranca con fuerza, metales arriba, piano y percusión)
 
 [Verse 1]
@@ -29,7 +56,7 @@ perfiles = {
 (Coro principal, pegadizo y claro)
 
 [Soneo]
-Guía: (Pregón corto con buenos dicharachos de la calle. Recuerda: NADA de onomatopeyas literales)
+Guía: (Pregón corto con buenos dicharachos de la calle)
 
 [Mambo 1]
 (Instrumental: Primer arreglo de metales, bailable y sabroso)
@@ -52,7 +79,8 @@ Guía: (Soneo final con toda la bomba)
 
 [Mambo 3 - Cierre]
 (Metales finales a fuego y cierre con bloque seco)"""
-        },
+    }
+} # <--- AQUÍ ESTÁ LA LLAVE QUE FALTABA PARA CERRAR EL DICCIONARIO
 
 # Interfaz de usuario
 st.subheader("Configura tu canción")
@@ -72,8 +100,6 @@ if st.button("Escribir Letra con IA", type="primary"):
             estilo = perfil["style"]
             
             try:
-                genai.configure(api_key=MI_API_KEY)
-                
                 # Sistema Anti Error 404
                 modelo_valido = None
                 for m in genai.list_models():
@@ -94,7 +120,7 @@ if st.button("Escribir Letra con IA", type="primary"):
                 1. TODO ES CANTADO: Queda TOTALMENTE PROHIBIDO usar partes habladas o narraciones secas.
                 2. NUNCA menciones nombres de orquestas reales en la letra.
                 3. ARMONÍA: Presta especial atención a la sección [Bridge: Key Change]. Crea una letra distinta ahí que invite al cantante a subir de tono o cambiar la armonía drásticamente.
-                4. EL SONEO: Los soneos deben ser melódicos. Tienen que tener sabor, pero con palabras bien dichas que inviten a una interpretación de estudio natural, no a gritos robotizados.
+                4. EL SONEO Y REGLA DE ONOMATOPEYAS: Los soneos deben ser melódicos y con sabor cubano. NUNCA uses onomatopeyas literales como "zas", "pum" o similares, ya que los cantantes virtuales las vocalizan de forma literal arruinando el tumbao.
                 5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags intactos (incluyendo [Drum Break], [Moña], etc.). No escribas introducciones explicativas.
                 
                 Estructura obligatoria a rellenar:
