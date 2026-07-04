@@ -11,10 +11,10 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles definitivo: Calidad de estudio, modulación y soneos melódicos.
+# Diccionario de perfiles definitivo purgado de ruidos en vivo
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel)": {
-        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, gentle whisper, no belting, NO robotic voice, NO crowd, NO audience",
+        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, gentle whisper, no belting, NO crowd, NO audience, NO live performance, NO cheering",
         "letra_template": """[Intro Orquestal]
 (Cuerdas románticas y piano suave. Atmósfera íntima)
 
@@ -45,7 +45,7 @@ perfiles = {
 (Voz susurrada finalizando el tema, cuerdas desvaneciéndose lentamente, terminar en seco)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
-        "style": "authentic cuban timba, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, live studio sound",
+        "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix, NO crowd, NO audience, NO live performance, NO cheering",
         "letra_template": """[Intro Tumbao y Metales]
 (Arranca con fuerza, metales arriba, piano y percusión)
 
@@ -80,7 +80,7 @@ Guía: (Soneo final con toda la bomba)
 [Mambo 3 - Cierre]
 (Metales finales a fuego y cierre con bloque seco)"""
     }
-} # <--- AQUÍ ESTÁ LA LLAVE QUE FALTABA PARA CERRAR EL DICCIONARIO
+}
 
 # Interfaz de usuario
 st.subheader("Configura tu canción")
