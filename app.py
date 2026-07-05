@@ -11,39 +11,39 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles definitivo con la orquesta restaurada y voces corregidas
+# Diccionario de perfiles definitivo: Calidad de estudio restaurada y tesituras controladas.
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel)": {
-        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, rich male crooner, natural studio vocals, melodic phrasing, passionate but controlled vocals, NO screaming, NO belting, NO crowd, NO audience, NO live performance, NO cheering",
+        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, no belting, NO robotic voice, NO crowd, NO audience, NO live performance, NO cheering",
         "letra_template": """[Intro Orquestal]
-(Arrancan las cuerdas majestuosas y el piano elegante. Sonido grande y de estudio)
+(Cuerdas románticas y piano suave)
 
 [Verse 1]
-(Voz clara y melódica, cantando con elegancia. Escribe 4 versos)
+(Escribe 4 versos íntimos)
 
 [Pre-Chorus]
-(Sube la emoción de la orquesta y la voz gana presencia sin gritar. Escribe 2 versos)
+(Escribe 2 versos subiendo la emoción musical pero manteniendo la voz suave)
 
 [Chorus]
-(Coro amplio, instrumentación rica con toda la orquesta, voz potente pero controlada. Escribe 4 versos con la melodía principal)
+(Escribe 4 versos con la melodía principal, elegante y controlada)
 
-[Verse 2]
-(Baja un poco la intensidad musical, la voz cuenta el resto de la historia. Escribe 4 versos)
+[Interludio Musical]
+(Solo de guitarra acústica, trompeta con sordina o piano)
 
-[Chorus]
-(Repite el coro con más instrumentación, cuerdas y vientos, voz con mucho sentimiento)
+[Verse 2 - Low Register]
+(Escribe 4 versos continuando la historia. Voz en tesitura media-baja, conversacional)
 
-[Bridge]
-(Puente musical y lírico con cambio de acordes. La orquesta brilla)
+[Chorus - Soft Crooning]
+(Repite el coro principal. Mantener el mismo tono, sin gritar)
 
-[Guitar Solo]
-(Solo de guitarra acústica elegante)
+[Bridge - Intimate]
+(Puente musical y lírico con acordes de jazz, voz muy cercana y cálida)
 
-[Chorus]
-(Último coro con toda la emoción de la orquesta, modulación hacia arriba, el cantante se luce pero con técnica de estudio impecable)
+[Chorus - Smooth Delivery]
+(Último coro, la orquesta crece en arreglos pero el cantante mantiene el control absoluto, SIN modular hacia arriba, SIN subir la tesitura)
 
 [Outro]
-(Terminando el tema con clase, cuerdas desvaneciéndose lentamente, terminar en seco)"""
+(Terminar en seco, corte limpio)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
         "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix, NO crowd, NO audience, NO live performance, NO cheering",
@@ -120,8 +120,8 @@ if st.button("Escribir Letra con IA", type="primary"):
                 REGLAS MUSICALES ESTRICTAS:
                 1. TODO ES CANTADO: Queda TOTALMENTE PROHIBIDO usar partes habladas o narraciones secas.
                 2. NUNCA menciones nombres de orquestas reales en la letra.
-                3. ARMONÍA: Presta especial atención a la sección [Bridge: Key Change]. Crea una letra distinta ahí que invite al cantante a subir de tono o cambiar la armonía drásticamente.
-                4. EL SONEO Y REGLA DE ONOMATOPEYAS: Los soneos deben ser melódicos y con sabor cubano. NUNCA uses onomatopeyas literales como "zas", "pum" o similares, ya que los cantantes virtuales las vocalizan de forma literal arruinando el tumbao.
+                3. DINÁMICA VOCAL Y ARMONÍA: Mantén la tesitura controlada. NUNCA ordenes subir de tono (Key Change) ni modular hacia arriba en la segunda mitad o en el final, para evitar que la IA grite.
+                4. EL SONEO Y REGLA DE ONOMATOPEYAS: Los soneos deben ser melódicos. NUNCA uses onomatopeyas literales (no escribas "zas", "pum" ni sonidos de golpes), ya que los cantantes virtuales las vocalizan literalmente y arruinan la canción.
                 5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags intactos (incluyendo [Drum Break], [Moña], etc.). No escribas introducciones explicativas.
                 
                 Estructura obligatoria a rellenar:
