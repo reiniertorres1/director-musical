@@ -11,38 +11,39 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles definitivo purgado de ruidos en vivo
+# Diccionario de perfiles definitivo con la orquesta restaurada y voces corregidas
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel)": {
-        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, gentle whisper, no belting, NO crowd, NO audience, NO live performance, NO cheering",
+        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, rich male crooner, natural studio vocals, melodic phrasing, passionate but controlled vocals, NO screaming, NO belting, NO crowd, NO audience, NO live performance, NO cheering",
         "letra_template": """[Intro Orquestal]
-(Cuerdas románticas y piano suave. Atmósfera íntima)
+(Arrancan las cuerdas majestuosas y el piano elegante. Sonido grande y de estudio)
 
-[Verse 1 - Soft Vocals]
-(Canta con voz aterciopelada y casi susurrada. Escribe 4 versos íntimos)
+[Verse 1]
+(Voz clara y melódica, cantando con elegancia. Escribe 4 versos)
 
-[Pre-Chorus - Gentle]
-(Sube la emoción de la orquesta, pero la voz se mantiene controlada y romántica. Escribe 2 versos)
+[Pre-Chorus]
+(Sube la emoción de la orquesta y la voz gana presencia sin gritar. Escribe 2 versos)
 
-[Chorus - No Belting]
-(Coro amplio, instrumentación rica, voz con mucho sentimiento pero SIN gritar. Escribe 4 versos con la melodía principal)
+[Chorus]
+(Coro amplio, instrumentación rica con toda la orquesta, voz potente pero controlada. Escribe 4 versos con la melodía principal)
 
-[Verse 2 - Intimate]
-(Vuelve a la intimidad, voz suave y cercana contando el resto de la historia. Escribe 4 versos)
+[Verse 2]
+(Baja un poco la intensidad musical, la voz cuenta el resto de la historia. Escribe 4 versos)
 
-[Chorus - No Belting]
-(Repite el coro con más instrumentación, cuerdas majestuosas, voz cálida)
+[Chorus]
+(Repite el coro con más instrumentación, cuerdas y vientos, voz con mucho sentimiento)
 
 [Bridge]
-(Puente musical y lírico con cambio de acordes. Voz expresiva pero contenida)
+(Puente musical y lírico con cambio de acordes. La orquesta brilla)
 
 [Guitar Solo]
+(Solo de guitarra acústica elegante)
 
-[Chorus - Emotional but smooth]
-(Último coro con toda la emoción, modulación hacia arriba, pero manteniendo el control vocal)
+[Chorus]
+(Último coro con toda la emoción de la orquesta, modulación hacia arriba, el cantante se luce pero con técnica de estudio impecable)
 
 [Outro]
-(Voz susurrada finalizando el tema, cuerdas desvaneciéndose lentamente, terminar en seco)"""
+(Terminando el tema con clase, cuerdas desvaneciéndose lentamente, terminar en seco)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
         "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix, NO crowd, NO audience, NO live performance, NO cheering",
