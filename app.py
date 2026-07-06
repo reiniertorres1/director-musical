@@ -1,52 +1,49 @@
 import streamlit as st
 import google.generativeai as genai
 
-# Jalamos la llave secreta y se la asignamos a la variable que tu código ya conoce
+# Jalamos la llave secreta
 MI_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=MI_API_KEY)
 
-# Configuración de la página para móviles
+# Configuración de la página
 st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles definitivo: Métrica estricta y curva emocional corregida
+# Diccionario de perfiles con la fórmula exacta de Suno para Pop Orquestal 90s
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel)": {
-        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, brass section, soft acoustic guitar, elegant piano, powerful romantic crooner, rich vocal tone, passionate, melodic phrasing, dramatic crescendo, NO screaming, NO shrill, NO crowd, NO live performance",
-        "letra_template": """[Intro Orquestal]
-(Cuerdas románticas y piano elegante. Atmósfera de gran estudio)
+        "style": "90s orchestral latin pop, symphonic bolero, powerful tenor vocals, grand piano, lush string section, smooth fretless bass, brass accents, dramatic romantic ballad, pristine studio polish, emotional crescendo, clear vibrato, clean belting, NO acoustic guitar, NO lo-fi, NO crowd",
+        "letra_template": """[Majestic Intro]
+(Piano de cola y gran sección de cuerdas. Sonido de estudio de Los Ángeles, años 90)
 
 [Verse 1]
-(Escribe 4 versos. Métrica estricta de 8 sílabas por verso. Rima ABAB)
+(Voz de tenor clara, potente y elegante. Métrica estricta de 8 sílabas para no perder el ritmo)
 
 [Pre-Chorus]
-(2 versos marcando una pausa rítmica, subiendo la intensidad)
+(Sube la tensión musical, entran los platillos suavemente)
 
-[Chorus]
-(Coro amplio. 4 versos con métrica exacta y rima pegadiza. Voz llena y romántica)
-
-[Interludio Musical]
-(Solo de trompeta con sordina o guitarra acústica)
+[Big Chorus]
+(Estalla la orquesta completa. Voz llena, apasionada y con vibrato limpio, sin desafinar. Métrica exacta)
 
 [Verse 2]
-(Escribe 4 versos. IMPORTANTE: Usa exactamente la misma métrica de 8 sílabas que en el Verse 1 para mantener el ritmo)
+(Baja la intensidad al piano y bajo fretless. Misma métrica estricta del Verse 1)
 
-[Chorus]
-(Repite el coro principal, la orquesta crece en arreglos)
+[Big Chorus]
+(Coro expansivo y majestuoso)
+
+[Instrumental Interlude]
+(Solo de saxofón alto o trompeta brillante, muy estilo pop de los 90s)
 
 [Bridge]
-(Cambio de acordes. 2 o 4 versos dramáticos. La voz sube en potencia y pasión, pero con técnica impecable)
+(Puente dramático. Acordes de paso. La voz entrega la máxima emoción con técnica de estudio impecable)
 
-[Vocal Hold - Dramatic Pause]
-(Pausa de la orquesta, solo la voz sostenida con mucho sentimiento)
-
-[Final Chorus - Full Emotion]
-(El coro final con toda la potencia de la orquesta, metales y cuerdas a tope. El cantante entrega todo sin perder afinación)
+[Climactic Final Chorus]
+(Cierre majestuoso. Toda la potencia orquestal y vocal al límite, pero controlada)
 
 [Outro]
-(Terminar en seco con un acorde mayor)"""
+(Vocal sostenida final, cerrando con un acorde orquestal grandioso y corte en seco)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
         "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix, NO crowd, NO audience, NO live performance, NO cheering",
@@ -89,7 +86,7 @@ Guía: (Soneo final con toda la bomba)
 # Interfaz de usuario
 st.subheader("Configura tu canción")
 seleccion = st.selectbox("Selecciona el Perfil Musical:", list(perfiles.keys()))
-tema = st.text_input("¿De qué trata la canción? (Tema principal):", placeholder="Ej. Un malentendido en el barrio...")
+tema = st.text_input("¿De qué trata la canción? (Tema principal):", placeholder="Ej. Un amor de 25 años...")
 
 # Botón de generación
 if st.button("Escribir Letra con IA", type="primary"):
@@ -121,11 +118,11 @@ if st.button("Escribir Letra con IA", type="primary"):
                 Eres un arreglista, compositor y letrista experto de {seleccion}. Escribe una canción sobre: "{tema}".
                 
                 REGLAS MUSICALES ESTRICTAS:
-                1. MÉTRICA PERFECTA (VITAL PARA LA IA): Para que el cantante no cante fuera de tiempo, TODOS los versos deben ser simétricos. Si el Verse 1 tiene versos octosílabos, el Verse 2 debe tener versos octosílabos. No uses frases largas ni desparejas.
+                1. MÉTRICA PERFECTA (VITAL PARA LA IA): Para que el cantante no cante fuera de tiempo, TODOS los versos deben ser matemáticamente simétricos. Si el Verse 1 tiene versos de 8 sílabas, el Verse 2 debe tener versos de 8 sílabas. 
                 2. TODO ES CANTADO: Queda TOTALMENTE PROHIBIDO usar partes habladas o narraciones secas.
-                3. NUNCA menciones nombres de orquestas reales en la letra.
-                4. EL SONEO Y REGLA DE ONOMATOPEYAS: Los soneos deben ser melódicos. NUNCA uses onomatopeyas literales (no escribas "zas", "pum" ni sonidos de golpes), ya que los cantantes virtuales las vocalizan literalmente y arruinan la canción.
-                5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags intactos (incluyendo [Drum Break], [Moña], etc.). No escribas introducciones explicativas.
+                3. NUNCA menciones nombres de orquestas o cantantes en la letra.
+                4. EL SONEO Y REGLA DE ONOMATOPEYAS: NUNCA uses onomatopeyas literales (no escribas "zas", "pum", "ahhh", "ohhh"), ya que los cantantes de IA las vocalizan como robots y arruinan la pista.
+                5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags intactos (como [Big Chorus], [Bridge], etc.). No escribas introducciones.
                 
                 Estructura obligatoria a rellenar:
                 {molde}
