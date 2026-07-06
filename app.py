@@ -11,39 +11,42 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles definitivo: Calidad de estudio restaurada y tesituras controladas.
+# Diccionario de perfiles definitivo: Métrica estricta y curva emocional corregida
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel)": {
-        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, soft acoustic guitar, jazz chords, slow tempo, elegant, acoustic drum kit, soft crooner, natural studio vocals, melodic phrasing, intimate, no belting, NO robotic voice, NO crowd, NO audience, NO live performance, NO cheering",
+        "style": "bolero, romantic latin pop, pristine studio recording, lush orchestral strings, brass section, soft acoustic guitar, elegant piano, powerful romantic crooner, rich vocal tone, passionate, melodic phrasing, dramatic crescendo, NO screaming, NO shrill, NO crowd, NO live performance",
         "letra_template": """[Intro Orquestal]
-(Cuerdas románticas y piano suave)
+(Cuerdas románticas y piano elegante. Atmósfera de gran estudio)
 
 [Verse 1]
-(Escribe 4 versos íntimos)
+(Escribe 4 versos. Métrica estricta de 8 sílabas por verso. Rima ABAB)
 
 [Pre-Chorus]
-(Escribe 2 versos subiendo la emoción musical pero manteniendo la voz suave)
+(2 versos marcando una pausa rítmica, subiendo la intensidad)
 
 [Chorus]
-(Escribe 4 versos con la melodía principal, elegante y controlada)
+(Coro amplio. 4 versos con métrica exacta y rima pegadiza. Voz llena y romántica)
 
 [Interludio Musical]
-(Solo de guitarra acústica, trompeta con sordina o piano)
+(Solo de trompeta con sordina o guitarra acústica)
 
-[Verse 2 - Low Register]
-(Escribe 4 versos continuando la historia. Voz en tesitura media-baja, conversacional)
+[Verse 2]
+(Escribe 4 versos. IMPORTANTE: Usa exactamente la misma métrica de 8 sílabas que en el Verse 1 para mantener el ritmo)
 
-[Chorus - Soft Crooning]
-(Repite el coro principal. Mantener el mismo tono, sin gritar)
+[Chorus]
+(Repite el coro principal, la orquesta crece en arreglos)
 
-[Bridge - Intimate]
-(Puente musical y lírico con acordes de jazz, voz muy cercana y cálida)
+[Bridge]
+(Cambio de acordes. 2 o 4 versos dramáticos. La voz sube en potencia y pasión, pero con técnica impecable)
 
-[Chorus - Smooth Delivery]
-(Último coro, la orquesta crece en arreglos pero el cantante mantiene el control absoluto, SIN modular hacia arriba, SIN subir la tesitura)
+[Vocal Hold - Dramatic Pause]
+(Pausa de la orquesta, solo la voz sostenida con mucho sentimiento)
+
+[Final Chorus - Full Emotion]
+(El coro final con toda la potencia de la orquesta, metales y cuerdas a tope. El cantante entrega todo sin perder afinación)
 
 [Outro]
-(Terminar en seco, corte limpio)"""
+(Terminar en seco con un acorde mayor)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
         "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix, NO crowd, NO audience, NO live performance, NO cheering",
@@ -51,10 +54,10 @@ perfiles = {
 (Arranca con fuerza, metales arriba, piano y percusión)
 
 [Verse 1]
-(Cuerpo del tema: Solo 4 líneas contando la historia directo al grano)
+(Cuerpo del tema: Solo 4 líneas de métrica simétrica contando la historia)
 
 [Coro 1]
-(Coro principal, pegadizo y claro)
+(Coro principal, pegadizo y claro. 2 o 4 líneas rítmicas)
 
 [Soneo]
 Guía: (Pregón corto con buenos dicharachos de la calle)
@@ -115,12 +118,12 @@ if st.button("Escribir Letra con IA", type="primary"):
                 model = genai.GenerativeModel(modelo_valido)
                 
                 prompt = f"""
-                Eres un arreglista y sonero experto de {seleccion}. Escribe una canción sobre: "{tema}".
+                Eres un arreglista, compositor y letrista experto de {seleccion}. Escribe una canción sobre: "{tema}".
                 
                 REGLAS MUSICALES ESTRICTAS:
-                1. TODO ES CANTADO: Queda TOTALMENTE PROHIBIDO usar partes habladas o narraciones secas.
-                2. NUNCA menciones nombres de orquestas reales en la letra.
-                3. DINÁMICA VOCAL Y ARMONÍA: Mantén la tesitura controlada. NUNCA ordenes subir de tono (Key Change) ni modular hacia arriba en la segunda mitad o en el final, para evitar que la IA grite.
+                1. MÉTRICA PERFECTA (VITAL PARA LA IA): Para que el cantante no cante fuera de tiempo, TODOS los versos deben ser simétricos. Si el Verse 1 tiene versos octosílabos, el Verse 2 debe tener versos octosílabos. No uses frases largas ni desparejas.
+                2. TODO ES CANTADO: Queda TOTALMENTE PROHIBIDO usar partes habladas o narraciones secas.
+                3. NUNCA menciones nombres de orquestas reales en la letra.
                 4. EL SONEO Y REGLA DE ONOMATOPEYAS: Los soneos deben ser melódicos. NUNCA uses onomatopeyas literales (no escribas "zas", "pum" ni sonidos de golpes), ya que los cantantes virtuales las vocalizan literalmente y arruinan la canción.
                 5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags intactos (incluyendo [Drum Break], [Moña], etc.). No escribas introducciones explicativas.
                 
