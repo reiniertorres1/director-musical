@@ -11,82 +11,95 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con variaciones dinámicas y calidad poética.")
 
-# Diccionario de perfiles modificado para ser DINÁMICO
+# Diccionario de perfiles con formato estricto para Suno (Cero acotaciones cantadas)
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel 90s)": {
         "base_style": "1990s adult contemporary pop ballad, symphonic bolero, smooth tenor vocals, velvety vocal tone, lush orchestral string section, acoustic grand piano, smooth fretless bass, pristine studio production, melodic phrasing",
-        "reglas_dinamicas": "Construye el 'Style' de Suno usando el estilo base, pero añádele 2 o 3 tags en inglés que reflejen el 'mood' de la letra (ej. melancholic, dramatic, passionate, gentle). Además, varía el instrumento del '[Instrumental Solo]' en la letra (alterna entre saxofón alto, trompeta con sordina o piano Rhodes). REGLA ESTRICTA: NUNCA incluyas guitarras eléctricas ni acústicas en los arreglos o tags de este estilo.",
-        "letra_template": """[Elegant Intro]
-(Describe en una línea los instrumentos que inician según el mood, sin guitarras)
+        "reglas_dinamicas": "Construye el 'Style' de Suno usando el estilo base, pero añádele 2 o 3 tags en inglés que reflejen el 'mood' de la letra (ej. melancholic, dramatic, passionate, gentle). REGLA ESTRICTA: NUNCA incluyas guitarras eléctricas ni acústicas.",
+        "letra_template": """[Elegant Orchestral Intro]
 
 [Verse 1]
 [Smooth vocals]
-(4 líneas poéticas. Métrica corta de 8 sílabas)
+(Línea 1 octosílaba)
+(Línea 2 octosílaba)
+(Línea 3 octosílaba)
+(Línea 4 octosílaba)
 
 [Pre-Chorus]
-(2 líneas marcando transición con las cuerdas)
+(Línea 1 corta)
+(Línea 2 corta)
 
 [Chorus]
 [Melodic delivery]
-(4 líneas de coro. Voz controlada y elegante sin gritar)
+(Línea 1 del coro)
+(Línea 2 del coro)
+(Línea 3 del coro)
+(Línea 4 del coro)
 
 [Verse 2]
 [Velvety chest voice]
-(4 líneas con la misma métrica del Verse 1)
+(Línea 1 octosílaba)
+(Línea 2 octosílaba)
+(Línea 3 octosílaba)
+(Línea 4 octosílaba)
 
 [Chorus]
 [Melodic delivery]
-(Repite coro)
+(Línea 1 del coro)
+(Línea 2 del coro)
+(Línea 3 del coro)
+(Línea 4 del coro)
 
-[Instrumental Solo]
-(Describe el solo con el instrumento de viento o piano que elegiste para esta variante)
+[Instrumental Saxophone Solo]
 
 [Bridge]
-(2 líneas dramáticas pero controladas)
+(Línea 1 dramática)
+(Línea 2 dramática)
 
 [Final Chorus]
 [Smooth and Emotional]
-(Último coro, cierre de la orquesta)
+(Línea 1 del coro)
+(Línea 2 del coro)
+(Línea 3 del coro)
+(Línea 4 del coro)
 
-[Outro]
-(Corte limpio final)"""
+[Outro]"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
         "base_style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix",
         "reglas_dinamicas": "Construye el 'Style' usando el estilo base, pero añádele tags en inglés que reflejen la temática (ej. street style, romantic, aggressive, party).",
         "letra_template": """[Intro Tumbao y Metales]
-(Arranca con fuerza, metales arriba, piano y percusión)
 
 [Verse 1]
-(Solo 4 líneas de métrica simétrica)
+(Línea 1)
+(Línea 2)
+(Línea 3)
+(Línea 4)
 
 [Coro 1]
-(Coro principal, 2 o 4 líneas)
+(Línea 1)
+(Línea 2)
 
 [Soneo]
-Guía: (Pregón corto con dichos cubanos)
+Guía: (Pregón corto 1)
+Guía: (Pregón corto 2)
 
 [Mambo 1]
-(Instrumental: Primer arreglo de metales)
 
 [Coro 2]
-Coro: (Coro nuevo)
+Coro: (Línea 1)
+Coro: (Línea 2)
 Guía: (Soneo tirando pulla)
-Coro: (Repite el coro 2)
 
 [Mambo 2 - Agresivo]
-(Instrumental: Cambio en los metales a reventar)
 
 [Efecto - Bloque Rítmico]
-(Corte seco)
 
 [Bomba y Masacote]
-(Piano machacando, bajo pesado)
 Coro: (Coro explosivo)
 Guía: (Soneo final con bomba)
 
-[Mambo 3 - Cierre]
-(Metales finales y bloque seco)"""
+[Mambo 3 - Cierre]"""
     }
 }
 
@@ -106,7 +119,6 @@ if st.button("Escribir Letra con IA", type="primary"):
             perfil = perfiles[seleccion]
             
             try:
-                # Buscar el mejor modelo
                 modelo_valido = None
                 for m in genai.list_models():
                     if 'generateContent' in m.supported_generation_methods:
@@ -119,7 +131,6 @@ if st.button("Escribir Letra con IA", type="primary"):
                     
                 model = genai.GenerativeModel(modelo_valido)
                 
-                # El Prompt Maestro Dinámico
                 prompt = f"""
                 Eres un director musical, arreglista y poeta experto de {seleccion}. 
                 El usuario quiere una canción sobre: "{tema}".
@@ -129,19 +140,19 @@ if st.button("Escribir Letra con IA", type="primary"):
                 Instrucciones de variación: {perfil['reglas_dinamicas']}
                 
                 TAREA 2: ESCRIBIR LA LETRA
-                REGLAS LÍRICAS ESTRICTAS (ANTI-RELLENO Y DURACIÓN):
-                1. CALIDAD POÉTICA: Escribe con lenguaje sofisticado y natural. QUEDA ESTRICTAMENTE PROHIBIDO usar palabras de "relleno" o que no tengan sentido solo para forzar una rima (ripios). Prioriza la rima asonante, el buen gusto y el sentimiento natural antes que una rima forzada y ridícula.
-                2. MÉTRICA SIMÉTRICA: Máximo 8 sílabas por verso. Mantenlo corto para que no exceda los 4 minutos de canción.
-                3. TODO ES CANTADO: Prohibido usar partes habladas o narraciones.
-                4. CERO ONOMATOPEYAS: Nunca escribas ruidos, "ahhh", "zas", "pum" o instrumentos cantados.
-                5. CONTROL VOCAL: Sustituye las explicaciones entre paréntesis por la letra real. Mantén intactos los tags de control de voz como [Smooth vocals] o [Velvety chest voice] para asegurar que el cantante no grite.
+                REGLAS ESTRICTAS PARA QUE SUNO CANTE BIEN:
+                1. FORMATO VISUAL OBLIGATORIO: Cada línea de la canción TIENE que ir en un renglón nuevo (usa la tecla Enter). NUNCA agrupes los versos en un solo párrafo de corrido, porque el cantante se quedará sin aire y cantará fuera de ritmo.
+                2. PROHIBIDO ESCRIBIR ACOTACIONES: NUNCA escribas texto explicativo fuera de los corchetes. No escribas "Un piano melancólico entra" ni "Solo de saxofón". Suno es una IA y cantará esas instrucciones con la voz del artista. Los espacios instrumentales (como [Intro] o [Solo]) se dejan vacíos debajo.
+                3. CALIDAD POÉTICA: Cero ripios. Usa lenguaje elegante y rima natural.
+                4. MÉTRICA SIMÉTRICA: Máximo 8 sílabas por verso. 
+                5. CERO ONOMATOPEYAS.
                 
-                ESTRUCTURA OBLIGATORIA (No añadas estrofas extra):
+                ESTRUCTURA OBLIGATORIA A RELLENAR (Sustituye lo que está entre paréntesis por la letra real con saltos de línea):
                 {perfil['letra_template']}
                 
                 FORMATO DE RESPUESTA:
                 Muestra primero el texto "**Style Prompt (Copiar en Suno):**" seguido del string de estilo generado.
-                Luego deja un espacio y muestra "**Letra Final (Copiar en Suno):**" seguido de toda la letra generada. No añadas otras explicaciones.
+                Luego deja un espacio y muestra "**Letra Final (Copiar en Suno):**" seguido de toda la letra generada.
                 """
                 
                 response = model.generate_content(prompt)
