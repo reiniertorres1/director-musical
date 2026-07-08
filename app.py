@@ -11,7 +11,7 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con variaciones dinámicas y calidad poética.")
 
-# Diccionario de perfiles con formato estricto para Suno (Cero acotaciones cantadas)
+# Diccionario de perfiles
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel 90s)": {
         "base_style": "1990s adult contemporary pop ballad, symphonic bolero, smooth tenor vocals, velvety vocal tone, lush orchestral string section, acoustic grand piano, smooth fretless bass, pristine studio production, melodic phrasing",
@@ -20,48 +20,48 @@ perfiles = {
 
 [Verse 1]
 [Smooth vocals]
-(Línea 1 octosílaba)
-(Línea 2 octosílaba)
-(Línea 3 octosílaba)
-(Línea 4 octosílaba)
+(Verso 1)
+(Verso 2)
+(Verso 3)
+(Verso 4)
 
 [Pre-Chorus]
-(Línea 1 corta)
-(Línea 2 corta)
+(Verso 1)
+(Verso 2)
 
 [Chorus]
 [Melodic delivery]
-(Línea 1 del coro)
-(Línea 2 del coro)
-(Línea 3 del coro)
-(Línea 4 del coro)
+(Verso 1)
+(Verso 2)
+(Verso 3)
+(Verso 4)
 
 [Verse 2]
 [Velvety chest voice]
-(Línea 1 octosílaba)
-(Línea 2 octosílaba)
-(Línea 3 octosílaba)
-(Línea 4 octosílaba)
+(Verso 1)
+(Verso 2)
+(Verso 3)
+(Verso 4)
 
 [Chorus]
 [Melodic delivery]
-(Línea 1 del coro)
-(Línea 2 del coro)
-(Línea 3 del coro)
-(Línea 4 del coro)
+(Verso 1)
+(Verso 2)
+(Verso 3)
+(Verso 4)
 
 [Instrumental Saxophone Solo]
 
 [Bridge]
-(Línea 1 dramática)
-(Línea 2 dramática)
+(Verso 1)
+(Verso 2)
 
 [Final Chorus]
 [Smooth and Emotional]
-(Línea 1 del coro)
-(Línea 2 del coro)
-(Línea 3 del coro)
-(Línea 4 del coro)
+(Verso 1)
+(Verso 2)
+(Verso 3)
+(Verso 4)
 
 [Outro]"""
     },
@@ -71,14 +71,14 @@ perfiles = {
         "letra_template": """[Intro Tumbao y Metales]
 
 [Verse 1]
-(Línea 1)
-(Línea 2)
-(Línea 3)
-(Línea 4)
+(Verso 1)
+(Verso 2)
+(Verso 3)
+(Verso 4)
 
 [Coro 1]
-(Línea 1)
-(Línea 2)
+(Verso 1)
+(Verso 2)
 
 [Soneo]
 Guía: (Pregón corto 1)
@@ -87,8 +87,8 @@ Guía: (Pregón corto 2)
 [Mambo 1]
 
 [Coro 2]
-Coro: (Línea 1)
-Coro: (Línea 2)
+Coro: (Verso 1)
+Coro: (Verso 2)
 Guía: (Soneo tirando pulla)
 
 [Mambo 2 - Agresivo]
@@ -141,18 +141,24 @@ if st.button("Escribir Letra con IA", type="primary"):
                 
                 TAREA 2: ESCRIBIR LA LETRA
                 REGLAS ESTRICTAS PARA QUE SUNO CANTE BIEN:
-                1. FORMATO VISUAL OBLIGATORIO: Cada línea de la canción TIENE que ir en un renglón nuevo (usa la tecla Enter). NUNCA agrupes los versos en un solo párrafo de corrido, porque el cantante se quedará sin aire y cantará fuera de ritmo.
-                2. PROHIBIDO ESCRIBIR ACOTACIONES: NUNCA escribas texto explicativo fuera de los corchetes. No escribas "Un piano melancólico entra" ni "Solo de saxofón". Suno es una IA y cantará esas instrucciones con la voz del artista. Los espacios instrumentales (como [Intro] o [Solo]) se dejan vacíos debajo.
-                3. CALIDAD POÉTICA: Cero ripios. Usa lenguaje elegante y rima natural.
-                4. MÉTRICA SIMÉTRICA: Máximo 8 sílabas por verso. 
+                1. FORMATO VISUAL OBLIGATORIO (CRÍTICO): Tienes que presionar ENTER después de cada verso. NO agrupes los versos en párrafos continuos.
+                   EJEMPLO DE LO QUE ESTÁ MAL:
+                   Mis recuerdos son neblina Un vacío que no entiendo De ese inicio
+                   EJEMPLO DE CÓMO DEBES HACERLO:
+                   Mis recuerdos son neblina
+                   Un vacío que no entiendo
+                   De ese inicio
+                2. CALIDAD POÉTICA Y CERO RIPIOS: Queda ESTRICTAMENTE PROHIBIDO usar palabras antimusicales como "doctrina" solo para forzar una rima. Usa vocabulario romántico (piel, alma, destino, pasión). Si no encuentras una rima consonante, usa rima asonante. NO sacrifiques la elegancia por rimar a la fuerza.
+                3. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Intro] o [Instrumental Saxophone Solo]) se dejan completamente solos, sin ningún texto al lado ni debajo.
+                4. MÉTRICA SIMÉTRICA: Máximo 8 sílabas por verso.
                 5. CERO ONOMATOPEYAS.
                 
-                ESTRUCTURA OBLIGATORIA A RELLENAR (Sustituye lo que está entre paréntesis por la letra real con saltos de línea):
+                ESTRUCTURA OBLIGATORIA A RELLENAR (Sustituye lo que está entre paréntesis por la letra real respetando los saltos de línea):
                 {perfil['letra_template']}
                 
                 FORMATO DE RESPUESTA:
                 Muestra primero el texto "**Style Prompt (Copiar en Suno):**" seguido del string de estilo generado.
-                Luego deja un espacio y muestra "**Letra Final (Copiar en Suno):**" seguido de toda la letra generada.
+                Luego deja un espacio y muestra "**Letra Final (Copiar en Suno):**" seguido de toda la letra generada con el formato de renglones correcto.
                 """
                 
                 response = model.generate_content(prompt)
