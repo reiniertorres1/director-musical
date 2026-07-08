@@ -11,41 +11,44 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles con la fórmula exacta corregida (Cero gritos, 100% elegancia)
+# Diccionario de perfiles optimizado para duración de 4 min y control vocal absoluto
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel 90s)": {
-        "style": "1990s latin pop ballad, symphonic bolero, smooth male adult contemporary vocals, lush orchestral strings, warm electric piano, elegant brass section, velvety chest voice, pristine romantic studio mix, smooth vocal delivery",
-        "letra_template": """[Elegant Orchestral Intro]
-(Piano, cuerdas y metales suaves. Sonido de gran estudio de los 90s)
+        "style": "1990s adult contemporary pop ballad, symphonic bolero, smooth tenor vocals, velvety vocal tone, lush orchestral string section, acoustic grand piano, rhodes electric piano, smooth fretless bass, subtle saxophone solo, pristine studio production, melodic phrasing",
+        "letra_template": """[Majestic Intro]
+(Piano de cola elegante y sección de cuerdas majestuosa. Sonido limpio de estudio)
 
 [Verse 1]
-[Smooth chest voice]
-(Voz suave, cálida y muy romántica. Métrica de 8 sílabas exactas)
+[Smooth vocals]
+(Escribe solo 4 líneas. Métrica corta de 8 sílabas por línea. Voz suave y melódica)
 
 [Pre-Chorus]
-(Sutil subida musical, pero el cantante mantiene el tono aterciopelado)
+(Sutil subida de las cuerdas. Solo 2 líneas cortas para marcar la transición)
 
-[Chorus: Smooth and Melodic]
-(Coro amplio y majestuoso. La voz es elegante, melódica y controlada en todo momento, cantando al oído)
+[Chorus]
+[Melodic delivery]
+(Coro principal. 4 líneas con rima perfecta. Voz clara, elegante y contenida, sin gritar)
 
 [Verse 2]
-[Velvety delivery]
-(Baja la intensidad al piano, voz muy cercana y cálida. Misma métrica de 8 sílabas)
+[Velvety chest voice]
+(Baja la intensidad al piano y bajo. 4 líneas cortas con la misma métrica exacta del Verse 1)
 
-[Chorus: Smooth and Melodic]
-(Repite el coro principal con toda la orquesta, sin perder la suavidad vocal)
+[Chorus]
+[Melodic delivery]
+(Repite el coro principal con toda la orquesta de cuerdas brillando)
 
-[Instrumental Interlude]
-(Solo de saxofón o trompeta elegante, pop 90s)
+[Instrumental Sax Solo]
+(Solo de saxofón alto melódico, muy elegante, estilo pop de los 90s)
 
-[Bridge: Emotional but restrained]
-(Puente emotivo, la orquesta crece pero el cantante mantiene una técnica impecable y suave)
+[Bridge]
+(Puente emotivo. Solo 2 líneas líricas. La voz se mantiene controlada y técnica)
 
-[Final Chorus: Melodic and Smooth]
-(Cierre orquestal grandioso con la voz manteniéndose en su registro medio, elegante, sin gritar)
+[Final Chorus]
+[Smooth and Emotional]
+(Último coro, cierre con toda la instrumentación pero el cantante mantiene su registro sin modular hacia arriba)
 
 [Outro]
-(Voz apagándose suavemente con un acorde final elegante)"""
+(Acorde orquestal final grandioso con corte limpio en seco)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
         "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix",
@@ -119,12 +122,13 @@ if st.button("Escribir Letra con IA", type="primary"):
                 prompt = f"""
                 Eres un arreglista, compositor y letrista experto de {seleccion}. Escribe una canción sobre: "{tema}".
                 
-                REGLAS MUSICALES ESTRICTAS:
-                1. MÉTRICA PERFECTA (VITAL PARA LA IA): Todos los versos deben ser matemáticamente simétricos (ej. 8 sílabas exactas) para que el cantante mantenga el ritmo perfecto.
-                2. ESTILO DE VOZ (CRÍTICO): El cantante debe sonar aterciopelado, elegante y romántico en todo momento. NUNCA agregues indicaciones de subir el tono, notas altas, estallidos, gritos o potencia. Usa siempre etiquetas de control como [Smooth chest voice], [Velvety delivery] o [Melodic and Smooth].
-                3. TODO ES CANTADO: Prohibido usar partes habladas o explicaciones.
-                4. CERO ONOMATOPEYAS: Nunca escribas "ahhh", "ohhh", "zas", "pum", porque la IA las lee como un robot y arruina la mezcla.
-                5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags estructurales (las frases entre corchetes) exactamente como te los doy.
+                REGLAS MUSICALES ULTRA ESTRICTAS PARA QUE LA CANCIÓN DURE MÁXIMO 4 MINUTOS Y LA IA NO GRITE:
+                1. MÉTRICA CORTA Y EXACTA: Cada línea de los versos y coros debe tener un máximo de 8 sílabas. Frases cortas y elegantes. Esto es VITAL para que la IA no se atropelle ni cante fuera de métrica.
+                2. CONTROL VOCAL ABSOLUTO: El cantante debe mantener un registro de tenor suave, melódico y aterciopelado. Usa estrictamente las etiquetas entre corchetes como [Smooth vocals] o [Melodic delivery] y jamás pongas textos que inciten a gritar, estallar o subir tonos descontrolados.
+                3. DURACIÓN BAJO CONTROL: No extiendas las estrofas. Respeta el límite exacto de líneas indicado en la estructura para que la canción no rebase jamás los 4 minutos.
+                4. TODO ES CANTADO: Prohibido usar partes habladas o explicaciones.
+                5. CERO ONOMATOPEYAS: Nunca escribas "ahhh", "ohhh", "zas", "pum", porque la IA las lee literalmente y arruina la mezcla.
+                6. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags estructurales exactamente como te los doy.
                 
                 Estructura obligatoria a rellenar:
                 {molde}
