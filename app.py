@@ -11,42 +11,44 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles con la fórmula exacta de Suno para Pop Orquestal 90s
+# Diccionario de perfiles con la fórmula exacta corregida (Cero gritos, 100% elegancia)
 perfiles = {
-    "Balada Romántica (Estilo Luis Miguel)": {
-        "style": "90s orchestral latin pop, symphonic bolero, powerful tenor vocals, grand piano, lush string section, smooth fretless bass, brass accents, dramatic romantic ballad, pristine studio polish, emotional crescendo, clear vibrato, clean belting, NO acoustic guitar, NO lo-fi, NO crowd",
-        "letra_template": """[Majestic Intro]
-(Piano de cola y gran sección de cuerdas. Sonido de estudio de Los Ángeles, años 90)
+    "Balada Romántica (Estilo Luis Miguel 90s)": {
+        "style": "1990s latin pop ballad, symphonic bolero, smooth male adult contemporary vocals, lush orchestral strings, warm electric piano, elegant brass section, velvety chest voice, pristine romantic studio mix, smooth vocal delivery",
+        "letra_template": """[Elegant Orchestral Intro]
+(Piano, cuerdas y metales suaves. Sonido de gran estudio de los 90s)
 
 [Verse 1]
-(Voz de tenor clara, potente y elegante. Métrica estricta de 8 sílabas para no perder el ritmo)
+[Smooth chest voice]
+(Voz suave, cálida y muy romántica. Métrica de 8 sílabas exactas)
 
 [Pre-Chorus]
-(Sube la tensión musical, entran los platillos suavemente)
+(Sutil subida musical, pero el cantante mantiene el tono aterciopelado)
 
-[Big Chorus]
-(Estalla la orquesta completa. Voz llena, apasionada y con vibrato limpio, sin desafinar. Métrica exacta)
+[Chorus: Smooth and Melodic]
+(Coro amplio y majestuoso. La voz es elegante, melódica y controlada en todo momento, cantando al oído)
 
 [Verse 2]
-(Baja la intensidad al piano y bajo fretless. Misma métrica estricta del Verse 1)
+[Velvety delivery]
+(Baja la intensidad al piano, voz muy cercana y cálida. Misma métrica de 8 sílabas)
 
-[Big Chorus]
-(Coro expansivo y majestuoso)
+[Chorus: Smooth and Melodic]
+(Repite el coro principal con toda la orquesta, sin perder la suavidad vocal)
 
 [Instrumental Interlude]
-(Solo de saxofón alto o trompeta brillante, muy estilo pop de los 90s)
+(Solo de saxofón o trompeta elegante, pop 90s)
 
-[Bridge]
-(Puente dramático. Acordes de paso. La voz entrega la máxima emoción con técnica de estudio impecable)
+[Bridge: Emotional but restrained]
+(Puente emotivo, la orquesta crece pero el cantante mantiene una técnica impecable y suave)
 
-[Climactic Final Chorus]
-(Cierre majestuoso. Toda la potencia orquestal y vocal al límite, pero controlada)
+[Final Chorus: Melodic and Smooth]
+(Cierre orquestal grandioso con la voz manteniéndose en su registro medio, elegante, sin gritar)
 
 [Outro]
-(Vocal sostenida final, cerrando con un acorde orquestal grandioso y corte en seco)"""
+(Voz apagándose suavemente con un acorde final elegante)"""
     },
     "Timba Cubana (Explosiva para el bailador)": {
-        "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix, NO crowd, NO audience, NO live performance, NO cheering",
+        "style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix",
         "letra_template": """[Intro Tumbao y Metales]
 (Arranca con fuerza, metales arriba, piano y percusión)
 
@@ -86,7 +88,7 @@ Guía: (Soneo final con toda la bomba)
 # Interfaz de usuario
 st.subheader("Configura tu canción")
 seleccion = st.selectbox("Selecciona el Perfil Musical:", list(perfiles.keys()))
-tema = st.text_input("¿De qué trata la canción? (Tema principal):", placeholder="Ej. Un amor de 25 años...")
+tema = st.text_input("¿De qué trata la canción? (Tema principal):", placeholder="Ej. Un amor incondicional...")
 
 # Botón de generación
 if st.button("Escribir Letra con IA", type="primary"):
@@ -118,11 +120,11 @@ if st.button("Escribir Letra con IA", type="primary"):
                 Eres un arreglista, compositor y letrista experto de {seleccion}. Escribe una canción sobre: "{tema}".
                 
                 REGLAS MUSICALES ESTRICTAS:
-                1. MÉTRICA PERFECTA (VITAL PARA LA IA): Para que el cantante no cante fuera de tiempo, TODOS los versos deben ser matemáticamente simétricos. Si el Verse 1 tiene versos de 8 sílabas, el Verse 2 debe tener versos de 8 sílabas. 
-                2. TODO ES CANTADO: Queda TOTALMENTE PROHIBIDO usar partes habladas o narraciones secas.
-                3. NUNCA menciones nombres de orquestas o cantantes en la letra.
-                4. EL SONEO Y REGLA DE ONOMATOPEYAS: NUNCA uses onomatopeyas literales (no escribas "zas", "pum", "ahhh", "ohhh"), ya que los cantantes de IA las vocalizan como robots y arruinan la pista.
-                5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags intactos (como [Big Chorus], [Bridge], etc.). No escribas introducciones.
+                1. MÉTRICA PERFECTA (VITAL PARA LA IA): Todos los versos deben ser matemáticamente simétricos (ej. 8 sílabas exactas) para que el cantante mantenga el ritmo perfecto.
+                2. ESTILO DE VOZ (CRÍTICO): El cantante debe sonar aterciopelado, elegante y romántico en todo momento. NUNCA agregues indicaciones de subir el tono, notas altas, estallidos, gritos o potencia. Usa siempre etiquetas de control como [Smooth chest voice], [Velvety delivery] o [Melodic and Smooth].
+                3. TODO ES CANTADO: Prohibido usar partes habladas o explicaciones.
+                4. CERO ONOMATOPEYAS: Nunca escribas "ahhh", "ohhh", "zas", "pum", porque la IA las lee como un robot y arruina la mezcla.
+                5. FORMATO: Sustituye mis explicaciones entre paréntesis por la letra real. Mantén TODOS los metatags estructurales (las frases entre corchetes) exactamente como te los doy.
                 
                 Estructura obligatoria a rellenar:
                 {molde}
