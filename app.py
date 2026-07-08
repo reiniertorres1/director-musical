@@ -15,7 +15,7 @@ st.markdown("Genera prompts y letras estructuradas con variaciones dinámicas y 
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel 90s)": {
         "base_style": "1990s adult contemporary pop ballad, symphonic bolero, smooth tenor vocals, velvety vocal tone, lush orchestral string section, acoustic grand piano, smooth fretless bass, pristine studio production, melodic phrasing",
-        "reglas_dinamicas": "Construye el 'Style' de Suno usando el estilo base, pero añádele 2 o 3 tags en inglés que reflejen el 'mood' de la letra (ej. melancholic, dramatic, passionate, gentle). REGLA ESTRICTA: NUNCA incluyas guitarras eléctricas ni acústicas.",
+        "reglas_dinamicas": "Añade 2 o 3 tags en inglés que reflejen el 'mood' de la letra (ej. melancholic, dramatic, passionate). REGLA ESTRICTA: NUNCA incluyas guitarras eléctricas ni acústicas.",
         "letra_template": """[Elegant Orchestral Intro]
 
 [Verse 1]
@@ -67,7 +67,7 @@ perfiles = {
     },
     "Timba Cubana (Explosiva para el bailador)": {
         "base_style": "authentic cuban timba, pristine studio production, heavy piano tumbao, complex horn section, songo groove, bomba bassline, polyrhythmic percussion, aggressive brass mambo, clean mix",
-        "reglas_dinamicas": "Construye el 'Style' usando el estilo base, pero añádele tags en inglés que reflejen la temática (ej. street style, romantic, aggressive, party).",
+        "reglas_dinamicas": "Añade tags en inglés que reflejen la temática (ej. street style, romantic, aggressive, party).",
         "letra_template": """[Intro Tumbao y Metales]
 
 [Verse 1]
@@ -141,30 +141,42 @@ if st.button("Escribir Letra con IA", type="primary"):
                 
                 TAREA 2: ESCRIBIR LA LETRA
                 REGLAS ESTRICTAS PARA QUE SUNO CANTE BIEN:
-                1. FORMATO VISUAL OBLIGATORIO (CRÍTICO): Tienes que presionar ENTER después de cada verso. NO agrupes los versos en párrafos continuos.
-                   EJEMPLO DE LO QUE ESTÁ MAL:
-                   Mis recuerdos son neblina Un vacío que no entiendo De ese inicio
-                   EJEMPLO DE CÓMO DEBES HACERLO:
-                   Mis recuerdos son neblina
-                   Un vacío que no entiendo
-                   De ese inicio
-                2. CALIDAD POÉTICA Y CERO RIPIOS: Queda ESTRICTAMENTE PROHIBIDO usar palabras antimusicales como "doctrina" solo para forzar una rima. Usa vocabulario romántico (piel, alma, destino, pasión). Si no encuentras una rima consonante, usa rima asonante. NO sacrifiques la elegancia por rimar a la fuerza.
-                3. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Intro] o [Instrumental Saxophone Solo]) se dejan completamente solos, sin ningún texto al lado ni debajo.
-                4. MÉTRICA SIMÉTRICA: Máximo 8 sílabas por verso.
-                5. CERO ONOMATOPEYAS.
+                1. CALIDAD POÉTICA Y CERO RIPIOS: Queda ESTRICTAMENTE PROHIBIDO usar palabras antimusicales o de relleno. Usa vocabulario romántico. Si no encuentras una rima consonante, usa rima asonante. NO sacrifiques la elegancia por rimar a la fuerza.
+                2. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Intro] o [Instrumental Saxophone Solo]) se dejan completamente solos.
+                3. MÉTRICA SIMÉTRICA: Máximo 8 sílabas por verso para no perder la métrica de 4 minutos.
+                4. CERO ONOMATOPEYAS. NUNCA uses "ahhh", "zas", "pum".
                 
-                ESTRUCTURA OBLIGATORIA A RELLENAR (Sustituye lo que está entre paréntesis por la letra real respetando los saltos de línea):
+                ESTRUCTURA OBLIGATORIA A RELLENAR:
                 {perfil['letra_template']}
                 
-                FORMATO DE RESPUESTA:
-                Muestra primero el texto "**Style Prompt (Copiar en Suno):**" seguido del string de estilo generado.
-                Luego deja un espacio y muestra "**Letra Final (Copiar en Suno):**" seguido de toda la letra generada con el formato de renglones correcto.
+                FORMATO DE RESPUESTA OBLIGATORIO:
+                Escribe exactamente las palabras "STYLE_PROMPT:" y "LETRA_FINAL:" para separar tu respuesta. No añadas nada más.
+                
+                STYLE_PROMPT:
+                (aquí va el style generado)
+                
+                LETRA_FINAL:
+                (aquí va la letra generada respetando los saltos de línea de la estructura)
                 """
                 
                 response = model.generate_content(prompt)
+                texto_respuesta = response.text
                 
                 st.success("¡Arreglo y letra generados con éxito!")
-                st.markdown(response.text)
+                
+                # Sistema para forzar la separación visual en cajas de código en Streamlit
+                if "LETRA_FINAL:" in texto_respuesta:
+                    partes = texto_respuesta.split("LETRA_FINAL:")
+                    style_part = partes[0].replace("STYLE_PROMPT:", "").strip()
+                    letra_part = partes[1].strip()
+                    
+                    st.subheader("Style Prompt (Copiar en Suno)")
+                    st.code(style_part, language="text")
+                    
+                    st.subheader("Letra Final (Copiar en Suno)")
+                    st.code(letra_part, language="text")
+                else:
+                    st.text(texto_respuesta)
                 
             except Exception as e:
                 st.error(f"Hubo un problema al conectar con la API: {e}")
