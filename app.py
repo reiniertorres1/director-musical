@@ -14,8 +14,8 @@ st.markdown("Genera prompts y letras estructuradas con variaciones dinámicas y 
 # Diccionario de perfiles
 perfiles = {
     "Balada Romántica (Estilo Luis Miguel 90s)": {
-        "base_style": "1990s adult contemporary pop ballad, symphonic bolero, smooth tenor vocals, velvety vocal tone, lush orchestral string section, acoustic grand piano, smooth fretless bass, pristine studio production, melodic phrasing",
-        "reglas_dinamicas": "Añade 2 o 3 tags en inglés que reflejen el 'mood' de la letra (ej. melancholic, dramatic, passionate). REGLA ESTRICTA: NUNCA incluyas guitarras eléctricas ni acústicas.",
+        "base_style": "1990s romantic latin pop ballad, symphonic bolero, lush orchestral strings, 90s synth pad, vintage electric piano, jazz chords, smooth fretless bass, elegant acoustic drum kit, rich male crooner, velvety chest voice, pristine studio mix, NO crowd",
+        "reglas_dinamicas": "Añade 2 o 3 tags en inglés que reflejen el 'mood' de la letra (ej. melancholic, dramatic, passionate). Mantén siempre el sonido de los sintetizadores de los 90s y el piano eléctrico.",
         "letra_template": """[Elegant Orchestral Intro]
 
 [Verse 1]
@@ -50,7 +50,7 @@ perfiles = {
 (Verso 3)
 (Verso 4)
 
-[Instrumental Saxophone Solo]
+[Instrumental Solo]
 
 [Bridge]
 (Verso 1)
@@ -142,7 +142,7 @@ if st.button("Escribir Letra con IA", type="primary"):
                 TAREA 2: ESCRIBIR LA LETRA
                 REGLAS ESTRICTAS PARA QUE SUNO CANTE BIEN:
                 1. CALIDAD POÉTICA Y CERO RIPIOS: Queda ESTRICTAMENTE PROHIBIDO usar palabras antimusicales o de relleno. Usa vocabulario romántico. Si no encuentras una rima consonante, usa rima asonante. NO sacrifiques la elegancia por rimar a la fuerza.
-                2. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Intro] o [Instrumental Saxophone Solo]) se dejan completamente solos.
+                2. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Intro] o [Instrumental Solo]) se dejan completamente solos.
                 3. MÉTRICA SIMÉTRICA: Máximo 8 sílabas por verso para no perder la métrica de 4 minutos.
                 4. CERO ONOMATOPEYAS. NUNCA uses "ahhh", "zas", "pum".
                 
