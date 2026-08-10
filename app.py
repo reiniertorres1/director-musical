@@ -9,17 +9,18 @@ genai.configure(api_key=MI_API_KEY)
 st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 
 st.title("🎵 Director Musical para Suno AI")
-st.markdown("Genera prompts y letras estructuradas con variaciones dinámicas y calidad poética.")
+st.markdown("Genera prompts y letras estructuradas con calidad profesional.")
 
-# Diccionario de perfiles
+# Diccionario de perfiles con Reglas de Letra INDEPENDIENTES
 perfiles = {
-    "Timba Cubana (Songo, Bajo Funky y Bloques)": {
-        "base_style": "authentic cuban timba, heavy songo groove, highly syncopated piano tumbao, funky slap bassline, tight percussion blocks, complex brass hits, polyrhythmic, syncopated rhythm section, smooth soulful cuban sonero vocals, highly melodic vocals, pristine studio production, NO screaming, NO shrill, NO reggaeton",
-        "reglas_dinamicas": "Añade tags en inglés que reflejen la temática (ej. street style, romantic, aggressive, party). Mantén siempre el groove de songo y el bajo funky.",
+    "Timba Cubana (Callejera - Estilo Pupy / Van Van / Maykel Blanco)": {
+        "base_style": "modern havana timba, heavy songo groove, deep male baritone vocals, conversational sonero, laid-back vocal delivery, fat bassline, syncopated piano tumbao, modern brass blocks, street timba, NO high pitch, NO belting, NO screaming, NO traditional salsa",
+        "reglas_dinamicas": "Añade tags en inglés que reflejen la temática (ej. street party, neighborhood drama, aggressive groove).",
+        "reglas_letras": "REGLA VITAL: Escribe con pura calle y jerga cubana actual. Usa dicharachos, picardía y temática de barrio (el día a día, la rumba, personajes de la calle). Estilo Juan Formell o Pupy y los que Son Son. NADA de poesía romántica ni palabras formales. Lenguaje directo, bailador y sabroso.",
         "letra_template": """[Intro Songo Instrumental]
 
 [Chorus 1]
-(Verso 1 del coro)
+(Verso 1 del coro - pegajoso y callejero)
 (Verso 2 del coro)
 (Verso 3 del coro)
 (Verso 4 del coro)
@@ -29,7 +30,7 @@ perfiles = {
 (Repite Verso 4 del coro)
 
 [Verse 1]
-[Smooth melodic vocals]
+[Deep baritone vocals]
 (Verso 1)
 (Verso 2)
 (Verso 3)
@@ -62,7 +63,8 @@ perfiles = {
 [Tight Percussion Block]
 
 [Soneo 1 y Coro]
-Guía: (Verso de improvisación 1)
+[Conversational delivery]
+Guía: (Verso de improvisación 1 - puro dicho cubano)
 Guía: (Verso de improvisación 2)
 Guía: (Verso de improvisación 3)
 Guía: (Verso de improvisación 4)
@@ -83,7 +85,7 @@ Coro: (Verso del coro)
 
 [Montuno - Llamada y Respuesta]
 Guía: (Línea larga 1)
-Coro: (Respuesta corta)
+Coro: (Respuesta corta y picante)
 Guía: (Línea larga 2)
 Coro: (Misma respuesta corta)
 Guía: (Línea larga 3)
@@ -116,6 +118,7 @@ Coro: (Misma respuesta corta)
     "Balada Romántica (Estilo Luis Miguel 90s)": {
         "base_style": "1990s romantic latin pop ballad, symphonic bolero, lush orchestral strings, 90s synth pad, vintage electric piano, jazz chords, smooth fretless bass, elegant acoustic drum kit, rich male crooner, velvety chest voice, pristine studio mix, NO crowd",
         "reglas_dinamicas": "Añade 2 o 3 tags en inglés que reflejen el 'mood' de la letra (ej. melancholic, dramatic, passionate). Mantén siempre el sonido de los sintetizadores de los 90s y el piano eléctrico. REGLA ESTRICTA: NUNCA incluyas guitarras eléctricas ni acústicas.",
+        "reglas_letras": "REGLA VITAL: Calidad poética y cero ripios. Usa vocabulario romántico, elegante y sofisticado. NADA de jerga ni lenguaje callejero.",
         "letra_template": """[Elegant Orchestral Intro]
 
 [Verse 1]
@@ -170,7 +173,7 @@ Coro: (Misma respuesta corta)
 # Interfaz de usuario
 st.subheader("Configura tu canción")
 seleccion = st.selectbox("Selecciona el Perfil Musical:", list(perfiles.keys()))
-tema = st.text_input("¿De qué trata la canción? (Tema principal):", placeholder="Ej. Una fiesta en La Habana...")
+tema = st.text_input("¿De qué trata la canción? (Tema principal):", placeholder="Ej. Un chisme en el barrio...")
 
 # Botón de generación
 if st.button("Escribir Letra con IA", type="primary"):
@@ -196,7 +199,7 @@ if st.button("Escribir Letra con IA", type="primary"):
                 model = genai.GenerativeModel(modelo_valido)
                 
                 prompt = f"""
-                Eres un director musical, arreglista y poeta experto de {seleccion}. 
+                Eres un director musical, arreglista y compositor experto de {seleccion}. 
                 El usuario quiere una canción sobre: "{tema}".
                 
                 TAREA 1: GENERAR EL STYLE PROMPT PARA SUNO AI
@@ -204,12 +207,13 @@ if st.button("Escribir Letra con IA", type="primary"):
                 Instrucciones de variación: {perfil['reglas_dinamicas']}
                 
                 TAREA 2: ESCRIBIR LA LETRA
-                REGLAS ESTRICTAS PARA QUE SUNO CANTE BIEN:
+                {perfil['reglas_letras']}
+                
+                REGLAS ESTRICTAS DE FORMATO:
                 1. FORMATO VISUAL OBLIGATORIO (CRÍTICO): Tienes que presionar ENTER después de cada verso. NO agrupes los versos en párrafos continuos.
-                2. CALIDAD POÉTICA Y CERO RIPIOS: Queda ESTRICTAMENTE PROHIBIDO usar palabras de relleno. Si no encuentras rima consonante, usa asonante.
-                3. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Tight Percussion Block], [Breakdown - Funky Bass and Congas only]) se dejan completamente solos, sin texto debajo.
-                4. MÉTRICA: Máximo 8 sílabas por verso.
-                5. CERO ONOMATOPEYAS. NUNCA uses "ahhh", "zas", "pum".
+                2. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Tight Percussion Block], [Breakdown - Funky Bass and Congas only]) se dejan completamente solos, sin texto debajo.
+                3. MÉTRICA: Máximo 8 sílabas por verso.
+                4. CERO ONOMATOPEYAS. NUNCA uses "ahhh", "zas", "pum".
                 
                 ESTRUCTURA OBLIGATORIA A RELLENAR (COMPLETA TODA LA PLANTILLA SIN SALTARTE NADA):
                 {perfil['letra_template']}
