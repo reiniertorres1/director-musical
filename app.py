@@ -11,11 +11,11 @@ st.set_page_config(page_title="Director Musical - Suno AI", layout="centered")
 st.title("🎵 Director Musical para Suno AI")
 st.markdown("Genera prompts y letras estructuradas con variaciones dinámicas y calidad poética.")
 
-# Diccionario de perfiles con la súper estructura de Timba y la Balada intacta
+# Diccionario de perfiles
 perfiles = {
-    "Timba Cubana (Arreglo Los Van Van / Maykel Blanco)": {
-        "base_style": "authentic cuban timba, songo rhythm, pristine studio production, heavy piano tumbao, complex horn section, bomba bassline, polyrhythmic percussion, clean melodic timba vocals, smooth sonero, NO screaming, NO shrill vocals",
-        "reglas_dinamicas": "Añade tags en inglés que reflejen la temática de la letra (ej. street style, romantic, party, aggressive).",
+    "Timba Cubana (Songo, Bajo Funky y Bloques)": {
+        "base_style": "authentic cuban timba, heavy songo groove, highly syncopated piano tumbao, funky slap bassline, tight percussion blocks, complex brass hits, polyrhythmic, syncopated rhythm section, smooth soulful cuban sonero vocals, highly melodic vocals, pristine studio production, NO screaming, NO shrill, NO reggaeton",
+        "reglas_dinamicas": "Añade tags en inglés que reflejen la temática (ej. street style, romantic, aggressive, party). Mantén siempre el groove de songo y el bajo funky.",
         "letra_template": """[Intro Songo Instrumental]
 
 [Chorus 1]
@@ -29,7 +29,7 @@ perfiles = {
 (Repite Verso 4 del coro)
 
 [Verse 1]
-[Melodic vocals]
+[Smooth melodic vocals]
 (Verso 1)
 (Verso 2)
 (Verso 3)
@@ -59,6 +59,8 @@ perfiles = {
 (Verso 3 del coro)
 (Verso 4 del coro)
 
+[Tight Percussion Block]
+
 [Soneo 1 y Coro]
 Guía: (Verso de improvisación 1)
 Guía: (Verso de improvisación 2)
@@ -81,35 +83,35 @@ Coro: (Verso del coro)
 
 [Montuno - Llamada y Respuesta]
 Guía: (Línea larga 1)
-Coro: (Respuesta de 2 palabras)
+Coro: (Respuesta corta)
 Guía: (Línea larga 2)
-Coro: (Misma respuesta de 2 palabras)
+Coro: (Misma respuesta corta)
 Guía: (Línea larga 3)
-Coro: (Misma respuesta de 2 palabras)
+Coro: (Misma respuesta corta)
 Guía: (Línea larga 4)
-Coro: (Misma respuesta de 2 palabras)
+Coro: (Misma respuesta corta)
 Guía: (Línea larga 5)
-Coro: (Misma respuesta de 2 palabras)
+Coro: (Misma respuesta corta)
 Guía: (Línea larga 6)
-Coro: (Misma respuesta de 2 palabras)
+Coro: (Misma respuesta corta)
 Guía: (Línea larga 7)
-Coro: (Misma respuesta de 2 palabras)
+Coro: (Misma respuesta corta)
 
 [Mambo con Coro]
 (Verso 1 del coro)
 (Verso 2 del coro)
 
-[Breakdown - Bass and Congas only - Despelote]
+[Breakdown - Funky Bass and Congas only]
 
-[Full Band Entrance - Mambo]
+[Full Band Entrance - Aggressive Mambo]
 
-[Final Chorus with Ad-libs]
+[Final Chorus with Melodic Ad-libs]
 (Verso 1 del coro largo)
 (Verso 2 del coro largo)
 (Verso 3 del coro largo)
 (Verso 4 del coro largo)
 
-[Outro]"""
+[Outro con Bloque Seco]"""
     },
     "Balada Romántica (Estilo Luis Miguel 90s)": {
         "base_style": "1990s romantic latin pop ballad, symphonic bolero, lush orchestral strings, 90s synth pad, vintage electric piano, jazz chords, smooth fretless bass, elegant acoustic drum kit, rich male crooner, velvety chest voice, pristine studio mix, NO crowd",
@@ -205,7 +207,7 @@ if st.button("Escribir Letra con IA", type="primary"):
                 REGLAS ESTRICTAS PARA QUE SUNO CANTE BIEN:
                 1. FORMATO VISUAL OBLIGATORIO (CRÍTICO): Tienes que presionar ENTER después de cada verso. NO agrupes los versos en párrafos continuos.
                 2. CALIDAD POÉTICA Y CERO RIPIOS: Queda ESTRICTAMENTE PROHIBIDO usar palabras de relleno. Si no encuentras rima consonante, usa asonante.
-                3. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Intro Songo Instrumental], [Mambo], [Breakdown - Bass and Congas only - Despelote]) se dejan completamente solos, sin texto debajo.
+                3. PROHIBIDO ESCRIBIR ACOTACIONES: Los espacios instrumentales (como [Tight Percussion Block], [Breakdown - Funky Bass and Congas only]) se dejan completamente solos, sin texto debajo.
                 4. MÉTRICA: Máximo 8 sílabas por verso.
                 5. CERO ONOMATOPEYAS. NUNCA uses "ahhh", "zas", "pum".
                 
@@ -227,7 +229,6 @@ if st.button("Escribir Letra con IA", type="primary"):
                 
                 st.success("¡Arreglo y letra generados con éxito!")
                 
-                # Sistema para forzar la separación visual
                 if "LETRA_FINAL:" in texto_respuesta:
                     partes = texto_respuesta.split("LETRA_FINAL:")
                     style_part = partes[0].replace("STYLE_PROMPT:", "").strip()
