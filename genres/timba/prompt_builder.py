@@ -1154,3 +1154,318 @@ No commentary before or after the lyrics.
 """
 
     return prompt
+
+def build_timba_reviewer_prompt(
+    topic,
+    mood,
+    director_plan,
+    draft_lyrics,
+    extra_instructions=""
+):
+    """
+    ETAPA 3:
+    El Revisor recibe el plan del Director
+    y el borrador del Compositor.
+
+    Su trabajo es corregir la letra,
+    no inventar una canción diferente.
+    """
+
+    lyrics_data = json.dumps(
+        TIMBA_LYRICS,
+        ensure_ascii=False,
+        indent=2
+    )
+
+    prompt = f"""
+You are the FINAL LYRIC EDITOR for an original
+modern Cuban Timba song.
+
+A Musical Director already designed the song.
+
+A Songwriter already produced a first draft.
+
+Your job is to REVISE that draft and deliver
+a substantially better final lyric.
+
+Do NOT redesign the song from scratch.
+
+==================================================
+ORIGINAL REQUEST
+==================================================
+
+TOPIC:
+{topic}
+
+CHARACTER:
+{mood}
+
+EXTRA INSTRUCTIONS:
+{extra_instructions if extra_instructions else "None"}
+
+==================================================
+DIRECTOR'S PLAN
+==================================================
+
+{director_plan}
+
+==================================================
+FIRST DRAFT
+==================================================
+
+{draft_lyrics}
+
+==================================================
+GENERAL LYRIC RULES
+==================================================
+
+{lyrics_data}
+
+==================================================
+YOUR ROLE
+==================================================
+
+Act as a demanding professional song editor.
+
+Keep what already sounds natural and strong.
+
+Rewrite what sounds:
+
+- generic
+- artificial
+- poetic for no reason
+- motivational
+- predictable
+- written only to rhyme
+- disconnected from the story
+- like generic Latin-music filler
+
+Do not praise or explain the draft.
+
+Simply improve it.
+
+==================================================
+DIRECTOR HAS PRIORITY
+==================================================
+
+The Director's plan has authority over the
+Songwriter's draft.
+
+If the draft contradicts the Director,
+correct the draft.
+
+Especially verify:
+
+- the concrete situation
+- the character's attitude
+- story progression
+- main coro concept
+- short coro
+
+If the Director selected a specific SHORT_CORO,
+use that exact response throughout the recurring
+1-bar coro section.
+
+Do NOT replace it with another coro.
+
+==================================================
+REMOVE AI WRITING
+==================================================
+
+Rewrite expressions such as:
+
+- mi alma vuela
+- se acabó la neblina
+- piedras y espinas
+- mi nueva libertad
+- brindo por mi sosiego
+- mi paz interior
+- me empodero
+- mi destino
+- mi camino
+- mi corazón floreció
+- me bajo de este barco
+- cierro ciclos
+
+unless there is an unusually strong contextual
+reason for them.
+
+Prefer concrete human reactions.
+
+==================================================
+NO EASY METAPHOR CHAINS
+==================================================
+
+Do not build the whole lyric around one cheap
+metaphorical family.
+
+For example, avoid repeatedly combining:
+
+show
+guion
+pelicula
+novela
+teatro
+repertorio
+cortina
+funcion
+
+Using one natural metaphor occasionally is fine.
+
+Building multiple sections from the same metaphor
+sounds artificial.
+
+==================================================
+CONVERSATION FIRST
+==================================================
+
+Favor things a person might really say.
+
+Prefer:
+
+- observations
+- accusations
+- contradictions
+- excuses
+- sarcastic answers
+- specific details
+- teasing remarks
+
+over abstract declarations.
+
+The singer should sound as if he is talking
+directly to somebody while still being musical.
+
+==================================================
+RHYME
+==================================================
+
+Do NOT preserve a weak line merely because it rhymes.
+
+Do NOT create new lines primarily to complete
+a rhyme pair.
+
+Natural Cuban phrasing and rhythmic character
+are more important than rhyme.
+
+==================================================
+STORY CONSISTENCY
+==================================================
+
+Do not invent:
+
+- a new romantic partner
+- a different betrayal
+- new major events
+- a different ending
+
+Stay inside the Director's story.
+
+==================================================
+COROS
+==================================================
+
+The main coro must be conversational,
+memorable and repeatable.
+
+If the first draft's main coro is weaker than
+the Director's hook ideas, rewrite it.
+
+Do not automatically preserve the draft coro.
+
+For the seven short soneos:
+
+- preserve exactly 7 soneos
+- each must introduce a different idea
+- each must connect to the actual story
+- each must finish naturally
+- each must be followed by the EXACT same short coro
+
+==================================================
+FINAL SECTION
+==================================================
+
+Do not lose quality at the end of the song.
+
+The final coro and final improvisations must NOT
+collapse into generic phrases such as:
+
+- a gozar
+- puro sabor
+- la timba me llama
+- el sol de La Habana
+- que suene la clave
+- soy libre
+- sigo mi camino
+
+The final section should use material developed
+throughout the actual story.
+
+==================================================
+STRUCTURE
+==================================================
+
+Preserve all required musical sections.
+
+Do not remove:
+
+- Introduccion
+- Coro inicial
+- Voz 1
+- Coro 2
+- Voz 2
+- Puente
+- Coro 3
+- Improvisacion y coro
+- Mambo 1
+- Soneo corto
+- Mambo con coro
+- Despelote
+- Regreso de la banda
+- Coro largo final
+- Coda
+
+Preserve their intended bar counts.
+
+==================================================
+FORMATTING
+==================================================
+
+Use bracket labels only.
+
+Do not use parentheses for singer identification.
+
+For short soneos use:
+
+[Soneo 1 - 3 bars]
+lyrics
+
+[Coro Corto - 1 bar]
+lyrics
+
+Continue through Soneo 7.
+
+Instrumental sections contain only their bracket label.
+
+Every sung phrase goes on its own line.
+
+==================================================
+FINAL OUTPUT
+==================================================
+
+Return ONLY:
+
+=== FINAL_LYRICS ===
+
+followed by the fully revised complete song.
+
+No critique.
+
+No explanations.
+
+No Markdown code fences.
+
+No text before or after the final lyrics.
+"""
+
+    return prompt
