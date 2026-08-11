@@ -2,7 +2,7 @@ import re
 import streamlit as st
 import google.generativeai as genai
 
-APP_VERSION = "TIMBA V6 — VOZ + BANDA CONTROLADAS + JUEZ + COSTOS"
+APP_VERSION = "TIMBA V6.1 — ESTILO CONTROLADO + DIAGNÓSTICO GEMINI"
 
 # ============================================================
 # MOTOR DE TIMBA - DIRECTOR + COMPOSITOR + REVISOR + JUEZ
@@ -260,12 +260,42 @@ def registrar_uso(response, usage):
     usage["total_tokens"] += total_tokens
 
 
-def generar_con_uso(model, prompt, usage):
-    """Genera contenido y registra automáticamente su consumo."""
+def generar_con_uso(model, prompt, usage, etapa="Gemini"):
+    """
+    Genera contenido, valida que el prompt no esté vacío
+    y registra automáticamente su consumo.
 
-    response = model.generate_content(
-        prompt
-    )
+    Si algo falla, informa exactamente en qué etapa ocurrió.
+    """
+
+    if prompt is None:
+        raise RuntimeError(
+            f"{etapa}: el constructor del prompt devolvió None."
+        )
+
+    if not isinstance(prompt, str):
+        raise RuntimeError(
+            f"{etapa}: el prompt no es texto. "
+            f"Tipo recibido: {type(prompt).__name__}."
+        )
+
+    prompt_limpio = prompt.strip()
+
+    if not prompt_limpio:
+        raise RuntimeError(
+            f"{etapa}: el prompt quedó vacío antes de llamar a Gemini."
+        )
+
+    try:
+        response = model.generate_content(
+            contents=prompt_limpio
+        )
+    except Exception as error:
+        raise RuntimeError(
+            f"{etapa}: Gemini rechazó un prompt NO vacío "
+            f"de {len(prompt_limpio):,} caracteres. "
+            f"Error original: {error}"
+        ) from error
 
     registrar_uso(
         response,
@@ -526,6 +556,7 @@ def ejecutar_juez_artistico(
     lyrics,
     usage,
     extra_instructions="",
+    etapa="Juez artístico",
 ):
     """
     Ejecuta el Juez Artístico y convierte su JSON
@@ -544,6 +575,7 @@ def ejecutar_juez_artistico(
         model,
         judge_prompt,
         usage,
+        etapa=etapa,
     )
 
     judge_text = judge_response.text
@@ -826,6 +858,7 @@ if st.button(
                         model,
                         director_prompt,
                         usage_totals,
+                        etapa="Director Musical",
                     )
 
                     director_text = (
@@ -930,6 +963,7 @@ if st.button(
                         model,
                         composer_prompt,
                         usage_totals,
+                        etapa="Compositor",
                     )
 
                     composer_text = (
@@ -979,6 +1013,7 @@ if st.button(
                         model,
                         reviewer_prompt,
                         usage_totals,
+                        etapa="Revisor inicial",
                     )
 
                     reviewer_text = (
@@ -1033,6 +1068,7 @@ if st.button(
                         lyrics=letra_actual,
                         usage=usage_totals,
                         extra_instructions=instrucciones_extra,
+                        etapa="Juez artístico inicial",
                     )
 
 
@@ -1110,6 +1146,7 @@ if st.button(
                             model,
                             repair_prompt,
                             usage_totals,
+                            etapa=f"Reparación automática {repair_attempts}",
                         )
 
                         repaired_text = (
@@ -1386,6 +1423,7 @@ LETRA_FINAL:
                         model,
                         prompt,
                         usage_totals,
+                        etapa="Balada",
                     )
 
                     texto_respuesta = response.text
@@ -1450,6 +1488,5 @@ LETRA_FINAL:
 
         except Exception as e:
             st.error(
-                f"Hubo un problema al conectar "
-                f"con Gemini: {e}"
+                f"Se detuvo la generación: {e}"
             )
