@@ -8,15 +8,17 @@ from .lyrics import TIMBA_LYRICS
 
 def build_timba_prompt(
     topic,
-    mood="Energetic",
+    mood="Bailable y sabrosa",
     extra_instructions=""
 ):
     """
-    Construye las instrucciones completas que recibira la IA
-    para componer una Timba.
+    Construye el prompt maestro para generar una Timba.
 
-    Todavia NO llama a Gemini.
-    Solamente prepara correctamente toda la informacion.
+    La IA debe:
+    1. Respetar la estructura musical.
+    2. Mantener banda y voz separadas.
+    3. Crear un style compacto para Suno.
+    4. Escribir una letra limpia, natural y utilizable.
     """
 
     arrangement_data = json.dumps(
@@ -43,15 +45,17 @@ def build_timba_prompt(
         indent=2
     )
 
-
     prompt = f"""
 You are the musical director, arranger and songwriter
-for an original Cuban Timba production.
+for an ORIGINAL modern Cuban Timba production.
 
-Your job is NOT to freely invent the musical format.
+Your job is to follow the musical system provided below.
 
-You must follow the provided arrangement, band,
-vocal and lyric specifications.
+Do NOT imitate or reproduce any existing song,
+melody, hook, lyric or signature arrangement.
+
+The musical references contained in the configuration
+describe general Cuban Timba characteristics only.
 
 ==================================================
 SONG REQUEST
@@ -60,128 +64,346 @@ SONG REQUEST
 TOPIC:
 {topic}
 
-MOOD:
+CHARACTER:
 {mood}
 
 EXTRA INSTRUCTIONS:
 {extra_instructions if extra_instructions else "None"}
 
 ==================================================
-MUSICAL STRUCTURE
+ARRANGEMENT
 ==================================================
 
 TIME SIGNATURE:
 {TIME_SIGNATURE}
 
-TOTAL ARRANGEMENT:
+TOTAL:
 {TOTAL_BARS} bars
 
 ARRANGEMENT BLUEPRINT:
 
 {arrangement_data}
 
-IMPORTANT:
+CRITICAL ARRANGEMENT RULES:
 
-The number of bars is musical duration.
-
-Do NOT automatically interpret one written lyric
-line as one musical bar.
-
-Respect the order and function of every section.
+- Follow the sections in the exact requested order.
+- Preserve the intended bar lengths.
+- Bars represent musical duration, NOT number of lyric lines.
+- Do not assume one line of lyrics equals one bar.
+- Leave realistic breathing and instrumental space.
+- Instrumental sections must remain instrumental.
+- The arrangement must progressively build in energy.
+- Do not turn every section into full-band playing.
+- Respect reductions, breakdowns, mambos and full-band returns.
 
 ==================================================
-BAND
+BAND CONFIGURATION
 ==================================================
 
 {band_data}
 
 ==================================================
-LEAD VOCAL
+VOCAL CONFIGURATION
 ==================================================
 
 {vocal_data}
 
 ==================================================
-LYRIC COMPOSITION
+LYRIC WRITING RULES
 ==================================================
 
 {lyrics_data}
 
 ==================================================
-FINAL TASK
+IMPORTANT SUNO OUTPUT RULES
 ==================================================
 
-Create one completely original Cuban Timba song
-based on all specifications above.
+Your output will later be copied into Suno.
 
-You must produce FOUR clearly separated sections:
+Therefore:
+
+1. BAND_STYLE must be SHORT.
+   Maximum approximately 55 words.
+
+2. VOCAL_STYLE must also be SHORT.
+   Maximum approximately 40 words.
+
+3. Do NOT write essays.
+
+4. Do NOT explain why an instrument is being used.
+
+5. Do NOT write phrases such as:
+   "The band embodies..."
+   "The percussion provides..."
+   "The singer showcases..."
+   "The arrangement features..."
+
+6. Instead use concise musical descriptors.
+
+Example of the desired BAND_STYLE density:
+
+Modern Cuban timba, deep songo groove, syncopated electric bass,
+changing piano tumbaos, tight congas and timbales, funky drum kit,
+strategic brass mambos, rhythmic bloques, dynamic gear changes,
+controlled breakdowns, explosive full-band returns, polished studio sound.
+
+This example demonstrates FORMAT and DENSITY only.
+Do not simply copy it.
+
+==================================================
+LYRIC QUALITY - CRITICAL
+==================================================
+
+The Spanish lyrics must sound like something a skilled
+Cuban popular-music songwriter could naturally write and sing.
+
+The lyrics must NOT sound like generic AI-generated Latin music.
+
+STRICTLY AVOID generic filler expressions unless the story
+genuinely requires them.
+
+Avoid overusing expressions such as:
+
+- puro sabor
+- que se prenda la fiesta
+- mi destino es bailar
+- que suenen los tambores
+- fuego
+- candela
+- con mi swing
+- la vida sigue
+- mi corazón en paz
+- la verdad siempre sale
+- yo sigo mi camino
+
+Do not insert generic dance-party phrases merely because
+the genre is Timba.
+
+Every line should relate to the actual story.
+
+==================================================
+CUBAN LANGUAGE
+==================================================
+
+Use natural Cuban conversational Spanish when appropriate.
+
+The language may contain:
+
+- humor
+- irony
+- double meaning
+- street intelligence
+- teasing
+- confidence
+- conversational expressions
+
+But do NOT fill every sentence with Cuban slang.
+
+Do NOT create a caricature of Cuban speech.
+
+The strongest Cuban flavor should come from:
+rhythm, attitude, phrasing, wit and call-and-response.
+
+==================================================
+COROS
+==================================================
+
+Coros are extremely important.
+
+Each coro must have:
+
+- a clear rhythmic identity
+- simple words
+- strong repetition value
+- direct connection to the story
+- enough space for the lead singer to interact
+
+Do not make every coro identical.
+
+The song may develop new coros as the arrangement advances.
+
+EXCEPTION:
+
+During the section:
+
+3 bars lead singer
++
+1 bar short coro
+x 7
+
+the SAME short coro response must be used every time.
+
+That response should be extremely concise and memorable.
+
+==================================================
+SONEOS
+==================================================
+
+Soneos must sound spontaneous.
+
+Every soneo must contribute something new.
+
+Possible functions include:
+
+- answering the coro
+- teasing the other person
+- revealing another detail
+- making a joke
+- challenging someone
+- changing perspective
+- using clever everyday imagery
+- increasing dramatic tension
+
+Do NOT simply paraphrase the previous soneo.
+
+For the seven short soneos:
+
+- create exactly 7 different lead improvisations
+- use the exact same short coro after each one
+- each improvisation must fit the idea of 3 musical bars
+- finish the thought before the coro enters
+
+==================================================
+INSTRUMENTAL LABELS
+==================================================
+
+This rule is CRITICAL.
+
+Inside LYRICS:
+
+NEVER write explanatory prose such as:
+
+(Instrumental intro with piano and brass)
+(Full band returns with maximum energy)
+(Band thins out)
+(Lead vocalist improvises)
+
+Do NOT use parentheses for production explanations.
+
+Instead, all non-sung musical instructions must be
+short bracket labels.
+
+GOOD:
+
+[Intro - 16 bars - Songo instrumental]
+
+[Mambo 1 - 16 bars]
+
+[Despelote - 8 bars]
+
+[Full Band Return - 8 bars]
+
+[Coda - 4 bars]
+
+BAD:
+
+[Intro]
+(Instrumental intro with strong Songo groove...)
+
+==================================================
+LYRIC FORMATTING
+==================================================
+
+Every sung phrase must appear on its own line.
+
+Do not create paragraphs.
+
+Do not write explanations inside the lyrics.
+
+Do not write "Guide:" before lead-vocal lines.
+
+Do not write commentary for the user.
+
+Section labels must remain inside brackets.
+
+The actual sung lyrics must be in Spanish.
+
+Musical section labels may use short standard music terminology.
+
+==================================================
+FINAL OUTPUT FORMAT
+==================================================
+
+Return EXACTLY these four sections
+and NOTHING ELSE.
+
+Do not use Markdown bold.
+
+Do not place triple backticks around the response.
+
 
 === BAND_STYLE ===
 
-Describe ONLY the instrumental band and production.
+Write ONE compact Suno-ready description of ONLY the band.
 
-Do not describe the singer here.
+Maximum approximately 55 words.
 
-Keep this section concise and useful for a
-music-generation model.
+Include the essential:
+
+- Cuban Timba identity
+- songo/timba rhythmic foundation
+- percussion
+- bass
+- piano
+- strategic brass
+- dynamic gear changes
+- studio character
+
+Do NOT describe the singer.
 
 
 === VOCAL_STYLE ===
 
-Describe ONLY the desired lead singer,
-vocal character, phrasing and performance.
+Write ONE compact Suno-ready description of ONLY the singer.
 
-Do not describe the instrumental arrangement here.
+Maximum approximately 40 words.
+
+Describe:
+
+- male voice
+- register
+- timbre
+- melodic delivery
+- Cuban rhythmic phrasing
+- soneo character
+- controlled progression of energy
+
+Do NOT describe the band.
 
 
 === SONG_STRUCTURE ===
 
-Give the complete ordered musical structure.
+Give a concise ordered map of the arrangement.
 
-Clearly identify:
+Use one line per section.
 
-- instrumental sections
-- lead vocal sections
-- coros
-- soneos
-- mambos
-- despelote
-- full-band returns
-- coda
+Include the number of bars.
 
-Preserve the specified number of bars.
+Do not add explanations or prose paragraphs.
 
 
 === LYRICS ===
 
-Write the complete original Spanish lyrics.
+Write the complete original song.
 
-Clearly label musical sections using brackets,
-for example:
+Follow the complete arrangement.
 
-[Intro]
-[Coro]
-[Voz]
-[Puente]
-[Soneo]
-[Mambo]
-[Despelote]
-[Coda]
+Use clean bracket labels.
 
-Instrumental instructions must remain inside brackets.
+Instrumental sections contain ONLY their bracket label.
 
-Do not put production explanations inside sung lyrics.
+Do not put prose underneath instrumental sections.
 
-The short coro used during the
-3-bar soneo + 1-bar coro section
-must remain the SAME every time.
+Do not use production explanations in parentheses.
 
-The individual soneos must be different.
+Do not write bar counts as spoken lyrics.
 
-The lyrics must tell a coherent story and sound
-natural when sung in Cuban Timba.
+Do not reproduce existing lyrics or recognizable hooks.
 
-Do not imitate or reproduce any existing song.
+Most importantly:
+
+Write a coherent song about the requested topic,
+not a collection of generic Timba phrases.
 """
 
     return prompt
