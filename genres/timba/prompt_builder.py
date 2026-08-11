@@ -412,6 +412,65 @@ not a collection of generic Timba phrases.
 # ============================================================
 
 
+
+# ============================================================
+# ESTILOS CONTROLADOS PARA SUNO
+# ============================================================
+#
+# IMPORTANTE:
+# Banda y voz ya NO son resumidas ni reinterpretadas por Gemini.
+# Estas dos funciones entregan directamente a app.py el sonido
+# base que queremos conservar en todas las generaciones.
+#
+# El Director Musical sigue usando Gemini para estructura,
+# historia y coros, pero no puede cambiar la identidad sonora.
+
+
+def build_timba_band_style():
+    """
+    Devuelve el Style de banda directamente para Suno.
+
+    Este texto es deliberadamente estable:
+    no depende de un resumen creativo del Director.
+    """
+
+    return (
+        "Modern Cuban timba with deep songo roots. "
+        "Virtuosic funky electric bass drives the groove with changing syncopated "
+        "tumbaos, anticipations, chromatic approaches and short fills; never static "
+        "root notes. Percussive piano uses changing tumbaos, extended voicings, "
+        "secondary and altered dominants, reharmonization and selected modulations. "
+        "Organic Cuban percussion with bloques, breaks and clear gear changes. "
+        "Brass only for distinct mambos and climactic punches. "
+        "Final third adds new harmonic and rhythmic information. "
+        "Warm punchy studio mix; no generic salsa loop."
+    )
+
+
+def build_timba_vocal_style():
+    """
+    Devuelve el Style vocal directamente para Suno.
+
+    Mantiene una identidad de sonero cubano relajado,
+    medio-grave y sabroso sin permitir que Gemini la reduzca
+    a una descripción genérica.
+    """
+
+    return (
+        "Mature Cuban male sonero, warm rounded chest tone, medium to medium-low "
+        "register. Relaxed conversational melodic phrasing, sometimes slightly "
+        "behind the beat, with natural Cuban cadence and picardia. "
+        "Spontaneous spoken-sung soneos, playful call-and-response and short melodic "
+        "turns. Controlled intimate studio vocal; excitement comes from timing and "
+        "groove, never volume. No shouting, belting, strained highs, nasal tenor, "
+        "rock, gospel or theatrical delivery."
+    )
+
+
+# ============================================================
+# DIRECTOR MUSICAL
+# ============================================================
+
 def build_timba_director_prompt(
     topic,
     mood="Bailable y sabrosa",
@@ -419,11 +478,12 @@ def build_timba_director_prompt(
 ):
     """
     ETAPA 1:
-    El Director Musical diseña la canción.
+    El Director diseña estructura, historia y coros.
 
-    No escribe todavía la letra completa.
-    Decide banda, voz, estructura narrativa,
-    coros y estrategia musical.
+    IMPORTANTE:
+    Ya NO genera BAND_STYLE ni VOCAL_STYLE.
+    Esos estilos son deterministas y se obtienen mediante
+    build_timba_band_style() y build_timba_vocal_style().
     """
 
     arrangement_data = json.dumps(
@@ -432,26 +492,26 @@ def build_timba_director_prompt(
         indent=2
     )
 
-    band_data = json.dumps(
-        TIMBA_BAND,
-        ensure_ascii=False,
-        indent=2
-    )
-
-    vocal_data = json.dumps(
-        TIMBA_VOCALS,
-        ensure_ascii=False,
-        indent=2
-    )
-
     prompt = f"""
-You are the MUSICAL DIRECTOR and ARRANGER
+You are the MUSICAL DIRECTOR and STORY ARCHITECT
 of an original modern Cuban Timba production.
 
 You are NOT writing the complete lyrics yet.
 
-Your job is to design the song so that another
-specialized songwriter can write the lyrics afterward.
+The base BAND sound and VOCAL identity are already locked
+elsewhere in the software.
+
+Do NOT redesign, summarize or rewrite the band's sound.
+Do NOT redesign, summarize or rewrite the singer's voice.
+
+Your responsibility in this stage is ONLY:
+
+- arrangement map
+- concrete dramatic situation
+- story progression
+- main coro concept
+- short coro
+- lyrical material for later soneos
 
 ==================================================
 SONG REQUEST
@@ -478,88 +538,79 @@ TOTAL:
 
 {arrangement_data}
 
-==================================================
-BAND
-==================================================
+Follow the section order and intended bar lengths exactly.
 
-{band_data}
+Bars describe musical duration, NOT number of lyric lines.
 
-==================================================
-VOICE
-==================================================
-
-{vocal_data}
+Instrumental sections remain instrumental.
 
 ==================================================
 YOUR JOB
 ==================================================
 
-Create the musical and lyrical BLUEPRINT.
+Create the musical-narrative BLUEPRINT.
 
 Do NOT write the full song.
 
-The blueprint must solve these things BEFORE
-the songwriter starts writing:
+Solve these things BEFORE the songwriter starts:
 
-1. What is the exact dramatic idea of the song?
+1. What is the exact concrete situation?
 
-2. How does the story progress from beginning
-   to end?
+2. How does the story progress from beginning to end?
 
-3. What should Verse 1 accomplish?
+3. What new information belongs in Voz 1?
 
-4. What should Verse 2 accomplish?
+4. What new information belongs in Voz 2?
 
-5. What is the function of the bridge?
+5. What changes in the Puente?
 
-6. What happens emotionally when the montuno begins?
+6. What material becomes available when the montuno begins?
 
-7. What should the singer talk about during
-   the soneos?
+7. What seven different conversational angles can inspire
+   the seven short soneos?
 
-8. What should happen during the final coro?
+8. What attitude closes the final section?
 
 9. Create the MAIN CORO concept.
 
-10. Create the SHORT CORO used during:
+10. Create ONE SHORT CORO for:
     3 bars singer + 1 bar coro x 7.
-
-The short coro must be extremely concise.
 
 ==================================================
 IMPORTANT LYRIC STRATEGY
 ==================================================
 
-Before creating any coro or hook, first turn the
-user's topic into a SPECIFIC HUMAN SITUATION.
+Turn the user's topic into a SPECIFIC HUMAN SITUATION.
 
-Do not work only with abstract ideas such as:
-"betrayal", "lies", "moving on" or "jealousy".
+Do not work only with abstractions such as:
 
-Create believable concrete circumstances that give
-the songwriter something real to talk about.
+- betrayal
+- lies
+- moving on
+- jealousy
+- freedom
 
-For example, depending on the user's topic:
+Create believable concrete circumstances.
+
+Useful material may include:
 
 - something the other person said
 - an excuse that does not add up
-- a message, call or detail that exposed the truth
-- a repeated behavior the singer finally recognizes
-- a contradiction in the other person's story
+- a message, call, location or detail
+- a contradiction
+- a repeated behavior
 - a specific everyday moment
-- a funny or ironic reaction to what happened
+- an ironic reaction
 
-Do NOT make the situation melodramatic unless the
-user specifically requests drama.
+The song should feel as if something actually happened.
 
-The song should feel as if something actually
-happened between real people.
+Do NOT invent melodrama unless the user requests it.
 
 ==================================================
 CHARACTER POINT OF VIEW
 ==================================================
 
-Define clearly how the main character reacts.
+Define how the main character reacts.
 
 Possible attitudes include:
 
@@ -575,17 +626,16 @@ Possible attitudes include:
 
 Do not automatically make the singer heartbroken.
 
-For a playful or danceable Timba, prefer confidence,
+For playful or danceable Timba, prefer confidence,
 wit and picardia over suffering.
 
 ==================================================
 CONVERSATIONAL WRITING
 ==================================================
 
-The central hooks should sound like phrases that
-a real person could actually SAY to another person.
+Hooks must sound like phrases a real person could SAY.
 
-Prefer spoken, direct expressions over poetic lines.
+Prefer spoken direct expressions over poetic lines.
 
 GOOD TYPE OF THINKING:
 
@@ -595,7 +645,7 @@ GOOD TYPE OF THINKING:
 "Eso no te lo crees ni tu"
 "Te cogieron fuera de base"
 
-These are examples of NATURAL DIRECTION only.
+These examples demonstrate natural direction only.
 Do not automatically reuse them.
 
 BAD TYPE OF THINKING:
@@ -604,26 +654,24 @@ BAD TYPE OF THINKING:
 "Mis ojos despertaron al jardin de tu mentira"
 "Mi destino renacio cuando tu amor termino"
 
-Do not write poetic sentences merely to create rhyme.
+Do not create poetic sentences merely for rhyme.
 
 ==================================================
-RHYME RULE
+RHYME
 ==================================================
 
-NEVER choose a weaker phrase just because it rhymes.
+NEVER choose a weaker phrase because it rhymes.
 
 Natural speech, rhythm, attitude and memorability
 are more important than perfect rhyme.
 
-A coro does NOT need every line to rhyme.
-
-Avoid obvious paired rhymes created only for effect.
+A coro does not need every line to rhyme.
 
 ==================================================
 CUBAN CHARACTER
 ==================================================
 
-The Cuban personality should come primarily from:
+Cuban personality should come primarily from:
 
 - conversational rhythm
 - wit
@@ -653,7 +701,7 @@ Avoid generic Latin-music filler such as:
 - este sabor cubano
 
 ==================================================
-CORO CREATION PROCESS
+CORO CREATION
 ==================================================
 
 Do NOT start by trying to rhyme.
@@ -663,40 +711,36 @@ First ask:
 "What is the strongest thing this character could
 say directly to the other person?"
 
-Then convert that thought into a short,
+Then turn that thought into a short,
 rhythmically memorable coro.
 
-The MAIN CORO should feel like a phrase people
-could remember after hearing it once.
+The MAIN CORO should be immediately memorable.
 
 The SHORT CORO should be even simpler.
 
 For the 1-bar response section, favor approximately
-2 to 6 spoken words whenever musically possible.
+2 to 6 spoken words whenever possible.
 
 ==================================================
 DIRECTOR LANGUAGE
 ==================================================
 
-Write the following sections entirely in SPANISH:
+Write these sections entirely in SPANISH:
 
 STORY_BLUEPRINT
 MAIN_CORO_IDEA
 SHORT_CORO
 
-The songwriter will later compose the complete
-Spanish lyric from this material.
+Think directly in Spanish.
 
-Do not mentally translate English poetic ideas
-into Spanish afterward.
-
-Think about the story and hooks directly in Spanish.
+Do not mentally create an English poetic phrase
+and translate it afterward.
 
 ==================================================
-STORY SPECIFICITY
+STORY BLUEPRINT
 ==================================================
 
-STORY_BLUEPRINT must include:
+STORY_BLUEPRINT must explicitly contain:
 
 SITUACION CONCRETA:
 What specifically happened.
@@ -714,96 +758,53 @@ PUENTE:
 What changes emotionally or narratively.
 
 MONTUNO / IMPROVISACION:
-What material the singer can play with.
+What concrete material the singer can play with.
 
 SONEOS CORTOS:
-At least 7 different conversational angles or
-details that can later inspire the seven soneos.
+At least 7 clearly different conversational angles,
+details, accusations, jokes or contradictions.
 
 FINAL:
 What attitude or conclusion closes the story.
 
 Give the songwriter concrete material.
 
-Do not write the complete lyrics yet.
-
-==================================================
-BAND STYLE
-==================================================
-
-Write one compact Suno-ready BAND description.
-
-Maximum about 55 words.
-
-No singer description.
-
-No essays.
-
-==================================================
-VOCAL STYLE
-==================================================
-
-Write one compact Suno-ready VOCAL description.
-
-Maximum about 40 words.
-
-No band description.
+Do not write the complete verses.
 
 ==================================================
 OUTPUT FORMAT
 ==================================================
 
-Return EXACTLY these sections:
-
-=== BAND_STYLE ===
-
-=== VOCAL_STYLE ===
+Return EXACTLY these four sections and NOTHING ELSE.
 
 === SONG_STRUCTURE ===
 
+Use one line for every arrangement section.
+Include the number of bars.
+
 === STORY_BLUEPRINT ===
 
+Follow the required blueprint headings above.
+
 === MAIN_CORO_IDEA ===
-
-=== SHORT_CORO ===
-
-Nothing else.
-
-
-SONG_STRUCTURE:
-
-Use one line for every arrangement section
-and include the number of bars.
-
-
-STORY_BLUEPRINT:
-
-Explain concisely what lyrical job each major
-vocal section must accomplish.
-
-Do not write full verses.
-
-
-MAIN_CORO_IDEA:
 
 Give the central hook idea and optionally
 2 or 3 candidate hook phrases.
 
 Do NOT write an entire song.
 
-
-SHORT_CORO:
+=== SHORT_CORO ===
 
 Write exactly ONE short Spanish coro response.
 
-It must be suitable for the recurring
-1-bar coro section.
+It must work for the recurring 1-bar coro section.
 
 Keep it concise, rhythmic and memorable.
+
+Nothing else.
 """
 
     return prompt
-
 
 
 def build_timba_composer_prompt(
@@ -1467,5 +1468,3 @@ No Markdown code fences.
 
 No text before or after the final lyrics.
 """
-
-    return prompt
