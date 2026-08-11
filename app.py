@@ -9,6 +9,7 @@ import google.generativeai as genai
 from genres.timba.prompt_builder import (
     build_timba_director_prompt,
     build_timba_composer_prompt,
+    build_timba_reviewer_prompt,
 )
 
 from genres.timba.arrangement import TOTAL_BARS
@@ -448,35 +449,115 @@ if st.button(
 
 
                 composer_sections = separar_secciones(
-                    composer_text,
-                    [
-                        "LYRICS"
-                    ]
-                )
+    composer_text,
+    [
+        "LYRICS"
+    ]
+)
 
 
-                letra = composer_sections.get(
-                    "LYRICS",
-                    ""
-                )
+letra_borrador = composer_sections.get(
+    "LYRICS",
+    ""
+)
 
 
-                # Fallback por si Gemini escribe
-                # la letra pero omite el encabezado.
-                if not letra:
+# Fallback por si Gemini escribe la letra
+# pero omite el encabezado.
+if not letra_borrador:
 
-                    letra = (
-                        composer_text
-                        .replace(
-                            "=== LYRICS ===",
-                            ""
-                        )
-                        .replace(
-                            "LYRICS:",
-                            ""
-                        )
-                        .strip()
-                    )
+    letra_borrador = (
+        composer_text
+        .replace(
+            "=== LYRICS ===",
+            ""
+        )
+        .replace(
+            "LYRICS:",
+            ""
+        )
+        .strip()
+    )
+
+
+# ------------------------------------------------
+# COMPROBAR BORRADOR
+# ------------------------------------------------
+
+if not letra_borrador:
+
+    st.warning(
+        "El Compositor no produjo "
+        "una letra válida."
+    )
+
+    st.code(
+        composer_text,
+        language="text"
+    )
+
+    st.stop()
+
+
+# ------------------------------------------------
+# ETAPA 3 - REVISOR FINAL
+# ------------------------------------------------
+
+with st.spinner(
+    "🔎 El Revisor está corrigiendo "
+    "y puliendo la letra..."
+):
+
+    reviewer_prompt = (
+        build_timba_reviewer_prompt(
+            topic=tema,
+            mood=caracter,
+            director_plan=director_text,
+            draft_lyrics=letra_borrador,
+            extra_instructions=instrucciones_extra
+        )
+    )
+
+    reviewer_response = (
+        model.generate_content(
+            reviewer_prompt
+        )
+    )
+
+    reviewer_text = (
+        reviewer_response.text
+    )
+
+
+reviewer_sections = separar_secciones(
+    reviewer_text,
+    [
+        "FINAL_LYRICS"
+    ]
+)
+
+
+letra = reviewer_sections.get(
+    "FINAL_LYRICS",
+    ""
+)
+
+
+# Fallback si Gemini omite el encabezado.
+if not letra:
+
+    letra = (
+        reviewer_text
+        .replace(
+            "=== FINAL_LYRICS ===",
+            ""
+        )
+        .replace(
+            "FINAL_LYRICS:",
+            ""
+        )
+        .strip()
+    )
 
 
                 # ------------------------------------------------
