@@ -3,7 +3,7 @@ import streamlit as st
 import google.generativeai as genai
 
 # ============================================================
-# MOTOR DE TIMBA - DIRECTOR + COMPOSITOR + REVISOR + JUEZ
+# MOTOR DE TIMBA - TRES ETAPAS
 # ============================================================
 
 from genres.timba.prompt_builder import (
@@ -11,20 +11,7 @@ from genres.timba.prompt_builder import (
     build_timba_composer_prompt,
     build_timba_reviewer_prompt,
 )
-
 from genres.timba.arrangement import TOTAL_BARS
-
-from genres.timba.quality_control import (
-    validate_timba_lyrics,
-    build_quality_report,
-)
-
-from genres.timba.artistic_judge import (
-    build_artistic_judge_prompt,
-    parse_artistic_judgment,
-    evaluate_artistic_judgment,
-    build_artistic_repair_report,
-)
 
 
 # ============================================================
@@ -76,19 +63,16 @@ BALADA_CONFIG = {
         "rich male crooner, velvety chest voice, pristine studio mix, "
         "NO crowd"
     ),
-
     "reglas_dinamicas": (
         "Añade 2 o 3 tags en inglés que reflejen el mood de la letra. "
         "Mantén el sonido de sintetizadores de los 90s y piano eléctrico. "
         "NUNCA incluyas guitarras eléctricas ni acústicas."
     ),
-
     "reglas_letras": (
         "Escribe una letra romántica elegante y natural. "
         "Evita ripios, frases artificiales y rimas forzadas. "
         "No uses jerga callejera."
     ),
-
     "letra_template": """
 [Elegant Orchestral Intro]
 
@@ -210,251 +194,6 @@ def separar_secciones(texto, nombres):
 
 
 # ============================================================
-# AYUDANTES DE TIMBA
-# ============================================================
-
-def extraer_letra(texto, encabezado):
-    """
-    Extrae LYRICS o FINAL_LYRICS.
-    Si Gemini omite el encabezado, utiliza el texto completo.
-    """
-
-    secciones = separar_secciones(
-        texto,
-        [encabezado],
-    )
-
-    letra = secciones.get(
-        encabezado,
-        "",
-    )
-
-    if letra:
-        return letra.strip()
-
-    return (
-        texto
-        .replace(
-            f"=== {encabezado} ===",
-            "",
-        )
-        .replace(
-            f"{encabezado}:",
-            "",
-        )
-        .strip()
-    )
-
-
-def limpiar_coro_corto(texto):
-    """
-    Extrae una sola línea utilizable del SHORT_CORO
-    decidido por el Director.
-    """
-
-    lineas = [
-        linea.strip()
-        for linea in texto.splitlines()
-        if linea.strip()
-    ]
-
-    if not lineas:
-        return ""
-
-    coro = lineas[0].strip()
-    coro = coro.strip('"')
-    coro = coro.strip("'")
-    coro = coro.strip()
-
-    return coro
-
-
-def ejecutar_juez_artistico(
-    model,
-    topic,
-    mood,
-    director_plan,
-    lyrics,
-    extra_instructions="",
-):
-    """
-    Ejecuta el Juez Artístico y convierte su JSON
-    en una evaluación procesada por Python.
-    """
-
-    judge_prompt = build_artistic_judge_prompt(
-        topic=topic,
-        mood=mood,
-        director_plan=director_plan,
-        final_lyrics=lyrics,
-        extra_instructions=extra_instructions,
-    )
-
-    judge_response = model.generate_content(
-        judge_prompt
-    )
-
-    judge_text = judge_response.text
-
-    judgment = parse_artistic_judgment(
-        judge_text
-    )
-
-    evaluation = evaluate_artistic_judgment(
-        judgment
-    )
-
-    return evaluation, judgment, judge_text
-
-
-def mostrar_juez(
-    artistic_evaluation,
-    artistic_judgment,
-    structural_validation,
-    repair_attempts,
-):
-    """
-    Muestra de forma visible el resultado del Control
-    de Calidad y del Juez Artístico.
-    """
-
-    with st.expander(
-        "⚖️ Ver Control de Calidad y Juez Artístico",
-        expanded=True,
-    ):
-
-        # --------------------------------------------------------
-        # CONTROL OBJETIVO
-        # --------------------------------------------------------
-
-        st.markdown("### Control estructural")
-
-        if structural_validation["passed"]:
-            st.success(
-                "PASS — estructura y reglas objetivas correctas."
-            )
-        else:
-            st.error(
-                "FAIL — se detectaron problemas estructurales "
-                "u objetivos."
-            )
-
-            for error in structural_validation["errors"]:
-                st.write(
-                    f"• ERROR: {error}"
-                )
-
-            for warning in structural_validation["warnings"]:
-                st.write(
-                    f"• WARNING: {warning}"
-                )
-
-        # --------------------------------------------------------
-        # JUEZ ARTISTICO
-        # --------------------------------------------------------
-
-        st.markdown("### Juez Artístico")
-
-        promedio = artistic_evaluation["average"]
-
-        if artistic_evaluation["passed"]:
-            st.success(
-                f"PASS — promedio artístico: {promedio}/10"
-            )
-        else:
-            st.error(
-                f"FAIL — promedio artístico: {promedio}/10"
-            )
-
-        for categoria, puntuacion in artistic_evaluation[
-            "scores"
-        ].items():
-
-            st.write(
-                f"**{categoria.capitalize()}:** "
-                f"{puntuacion}/10"
-            )
-
-        if artistic_evaluation["failed_categories"]:
-            st.markdown(
-                "#### Categorías reprobadas"
-            )
-
-            for categoria in artistic_evaluation[
-                "failed_categories"
-            ]:
-                st.write(
-                    f"• {categoria}"
-                )
-
-        problemas = artistic_judgment.get(
-            "problems",
-            [],
-        )
-
-        if problemas:
-            st.markdown(
-                "#### Problemas detectados"
-            )
-
-            for problema in problemas:
-                categoria = problema.get(
-                    "category",
-                    "",
-                )
-
-                excerpt = problema.get(
-                    "excerpt",
-                    "",
-                )
-
-                reason = problema.get(
-                    "reason",
-                    "",
-                )
-
-                st.write(
-                    f"• **{categoria}** — "
-                    f"“{excerpt}” — {reason}"
-                )
-
-        fortalezas = artistic_judgment.get(
-            "strengths",
-            [],
-        )
-
-        if fortalezas:
-            st.markdown(
-                "#### Fortalezas"
-            )
-
-            for fortaleza in fortalezas:
-                st.write(
-                    f"• {fortaleza}"
-                )
-
-        instrucciones = artistic_judgment.get(
-            "repair_instructions",
-            [],
-        )
-
-        if instrucciones:
-            st.markdown(
-                "#### Instrucciones de reparación"
-            )
-
-            for instruccion in instrucciones:
-                st.write(
-                    f"• {instruccion}"
-                )
-
-        st.caption(
-            f"Reparaciones automáticas realizadas: "
-            f"{repair_attempts}"
-        )
-
-
-# ============================================================
 # INTERFAZ
 # ============================================================
 
@@ -531,7 +270,6 @@ if st.button(
     "Crear Canción con IA",
     type="primary",
 ):
-
     if not tema:
         st.warning(
             "⚠️ Escribe primero de qué quieres "
@@ -541,12 +279,10 @@ if st.button(
     else:
         try:
             modelo_valido = obtener_modelo()
-            model = genai.GenerativeModel(
-                modelo_valido
-            )
+            model = genai.GenerativeModel(modelo_valido)
 
             # ====================================================
-            # TIMBA
+            # TIMBA - SISTEMA DE TRES ETAPAS
             # ====================================================
 
             if seleccion == TIMBA:
@@ -559,25 +295,17 @@ if st.button(
                     "🎼 El Director Musical está "
                     "diseñando la canción..."
                 ):
-
-                    director_prompt = (
-                        build_timba_director_prompt(
-                            topic=tema,
-                            mood=caracter,
-                            extra_instructions=instrucciones_extra,
-                        )
+                    director_prompt = build_timba_director_prompt(
+                        topic=tema,
+                        mood=caracter,
+                        extra_instructions=instrucciones_extra,
                     )
 
-                    director_response = (
-                        model.generate_content(
-                            director_prompt
-                        )
+                    director_response = model.generate_content(
+                        director_prompt
                     )
 
-                    director_text = (
-                        director_response.text
-                    )
-
+                    director_text = director_response.text
 
                 director_sections = separar_secciones(
                     director_text,
@@ -591,41 +319,30 @@ if st.button(
                     ],
                 )
 
-
                 banda = director_sections.get(
                     "BAND_STYLE",
                     "",
                 )
-
                 voz = director_sections.get(
                     "VOCAL_STYLE",
                     "",
                 )
-
                 estructura = director_sections.get(
                     "SONG_STRUCTURE",
                     "",
                 )
-
                 historia = director_sections.get(
                     "STORY_BLUEPRINT",
                     "",
                 )
-
                 coro_principal = director_sections.get(
                     "MAIN_CORO_IDEA",
                     "",
                 )
-
                 coro_corto = director_sections.get(
                     "SHORT_CORO",
                     "",
                 )
-
-                coro_corto_esperado = limpiar_coro_corto(
-                    coro_corto
-                )
-
 
                 # ------------------------------------------------
                 # COMPROBAR DIRECTOR
@@ -636,26 +353,20 @@ if st.button(
                     and voz
                     and estructura
                     and historia
-                    and coro_corto_esperado
+                    and coro_corto
                 ):
-
                     st.warning(
                         "El Director Musical respondió, "
                         "pero no respetó completamente "
                         "el formato esperado."
                     )
 
-                    st.subheader(
-                        "Respuesta del Director"
-                    )
-
+                    st.subheader("Respuesta del Director")
                     st.code(
                         director_text,
                         language="text",
                     )
-
                     st.stop()
-
 
                 # ------------------------------------------------
                 # ETAPA 2 - COMPOSITOR
@@ -665,391 +376,225 @@ if st.button(
                     "✍️ El Compositor está escribiendo "
                     "la letra..."
                 ):
-
-                    composer_prompt = (
-                        build_timba_composer_prompt(
-                            topic=tema,
-                            mood=caracter,
-                            director_plan=director_text,
-                            extra_instructions=instrucciones_extra,
-                        )
+                    composer_prompt = build_timba_composer_prompt(
+                        topic=tema,
+                        mood=caracter,
+                        director_plan=director_text,
+                        extra_instructions=instrucciones_extra,
                     )
 
-                    composer_response = (
-                        model.generate_content(
-                            composer_prompt
-                        )
+                    composer_response = model.generate_content(
+                        composer_prompt
                     )
 
-                    composer_text = (
-                        composer_response.text
-                    )
+                    composer_text = composer_response.text
 
-
-                letra_borrador = extraer_letra(
+                composer_sections = separar_secciones(
                     composer_text,
-                    "LYRICS",
+                    [
+                        "LYRICS",
+                    ],
                 )
+
+                letra_borrador = composer_sections.get(
+                    "LYRICS",
+                    "",
+                )
+
+                # Fallback por si Gemini omite el encabezado LYRICS.
+                if not letra_borrador:
+                    letra_borrador = (
+                        composer_text
+                        .replace(
+                            "=== LYRICS ===",
+                            "",
+                        )
+                        .replace(
+                            "LYRICS:",
+                            "",
+                        )
+                        .strip()
+                    )
+
+                # ------------------------------------------------
+                # COMPROBAR BORRADOR
+                # ------------------------------------------------
 
                 if not letra_borrador:
                     st.warning(
                         "El Compositor no produjo "
                         "una letra válida."
                     )
-
                     st.code(
                         composer_text,
                         language="text",
                     )
-
                     st.stop()
 
-
                 # ------------------------------------------------
-                # ETAPA 3 - REVISOR INICIAL
+                # ETAPA 3 - REVISOR FINAL
                 # ------------------------------------------------
 
                 with st.spinner(
                     "🔎 El Revisor está corrigiendo "
                     "y puliendo la letra..."
                 ):
-
-                    reviewer_prompt = (
-                        build_timba_reviewer_prompt(
-                            topic=tema,
-                            mood=caracter,
-                            director_plan=director_text,
-                            draft_lyrics=letra_borrador,
-                            extra_instructions=instrucciones_extra,
-                        )
+                    reviewer_prompt = build_timba_reviewer_prompt(
+                        topic=tema,
+                        mood=caracter,
+                        director_plan=director_text,
+                        draft_lyrics=letra_borrador,
+                        extra_instructions=instrucciones_extra,
                     )
 
-                    reviewer_response = (
-                        model.generate_content(
-                            reviewer_prompt
-                        )
+                    reviewer_response = model.generate_content(
+                        reviewer_prompt
                     )
 
-                    reviewer_text = (
-                        reviewer_response.text
-                    )
+                    reviewer_text = reviewer_response.text
 
-
-                letra_actual = extraer_letra(
+                reviewer_sections = separar_secciones(
                     reviewer_text,
-                    "FINAL_LYRICS",
+                    [
+                        "FINAL_LYRICS",
+                    ],
                 )
 
-                if not letra_actual:
+                letra = reviewer_sections.get(
+                    "FINAL_LYRICS",
+                    "",
+                )
+
+                # Fallback por si Gemini omite el encabezado FINAL_LYRICS.
+                if not letra:
+                    letra = (
+                        reviewer_text
+                        .replace(
+                            "=== FINAL_LYRICS ===",
+                            "",
+                        )
+                        .replace(
+                            "FINAL_LYRICS:",
+                            "",
+                        )
+                        .strip()
+                    )
+
+                # ------------------------------------------------
+                # RESULTADO
+                # ------------------------------------------------
+
+                if letra:
+                    st.success(
+                        "¡Timba creada correctamente!"
+                    )
+
+                    # ============================================
+                    # BANDA
+                    # ============================================
+
+                    st.subheader("🎺 Banda")
+                    st.caption(
+                        "Solamente el sonido de la orquesta."
+                    )
+                    st.code(
+                        banda,
+                        language="text",
+                    )
+
+                    # ============================================
+                    # VOZ
+                    # ============================================
+
+                    st.subheader("🎤 Voz")
+                    st.caption(
+                        "Solamente el cantante y "
+                        "su manera de interpretar."
+                    )
+                    st.code(
+                        voz,
+                        language="text",
+                    )
+
+                    # ============================================
+                    # STYLE FINAL
+                    # ============================================
+
+                    style_final = (
+                        banda.rstrip(" .")
+                        + ". "
+                        + voz.lstrip()
+                    )
+
+                    st.subheader(
+                        "🎼 Style Final — Copiar en Suno"
+                    )
+                    st.code(
+                        style_final,
+                        language="text",
+                    )
+
+                    # ============================================
+                    # PLAN DEL DIRECTOR
+                    # ============================================
+
+                    with st.expander(
+                        "🧠 Ver decisiones del Director Musical"
+                    ):
+                        st.markdown("### Estructura")
+                        st.code(
+                            estructura,
+                            language="text",
+                        )
+
+                        st.markdown(
+                            "### Plan de la historia"
+                        )
+                        st.code(
+                            historia,
+                            language="text",
+                        )
+
+                        if coro_principal:
+                            st.markdown(
+                                "### Idea del coro principal"
+                            )
+                            st.code(
+                                coro_principal,
+                                language="text",
+                            )
+
+                        st.markdown("### Coro corto")
+                        st.code(
+                            coro_corto,
+                            language="text",
+                        )
+
+                    # ============================================
+                    # LETRA FINAL
+                    # ============================================
+
+                    st.subheader(
+                        "📝 Letra Final — Copiar en Suno"
+                    )
+                    st.caption(
+                        "Esta es la versión revisada por "
+                        "el tercer paso del motor."
+                    )
+                    st.code(
+                        letra,
+                        language="text",
+                    )
+
+                else:
                     st.warning(
                         "El Revisor no produjo "
                         "una letra final válida."
                     )
-
                     st.code(
                         reviewer_text,
                         language="text",
                     )
-
-                    st.stop()
-
-
-                # ------------------------------------------------
-                # ETAPA 4 - CONTROL OBJETIVO + JUEZ ARTISTICO
-                # ------------------------------------------------
-
-                with st.spinner(
-                    "⚖️ El Control de Calidad y el "
-                    "Juez Artístico están evaluando la letra..."
-                ):
-
-                    structural_validation = (
-                        validate_timba_lyrics(
-                            letra_actual,
-                            coro_corto_esperado,
-                        )
-                    )
-
-                    (
-                        artistic_evaluation,
-                        artistic_judgment,
-                        artistic_raw,
-                    ) = ejecutar_juez_artistico(
-                        model=model,
-                        topic=tema,
-                        mood=caracter,
-                        director_plan=director_text,
-                        lyrics=letra_actual,
-                        extra_instructions=instrucciones_extra,
-                    )
-
-
-                # ------------------------------------------------
-                # ETAPA 5 - REPARACIONES AUTOMATICAS
-                # ------------------------------------------------
-
-                MAX_REPAIR_ATTEMPTS = 2
-                repair_attempts = 0
-
-                while (
-                    repair_attempts < MAX_REPAIR_ATTEMPTS
-                    and (
-                        not structural_validation["passed"]
-                        or not artistic_evaluation["passed"]
-                    )
-                ):
-
-                    repair_attempts += 1
-
-                    reports = []
-
-                    if not structural_validation["passed"]:
-                        reports.append(
-                            build_quality_report(
-                                structural_validation
-                            )
-                        )
-
-                    if not artistic_evaluation["passed"]:
-                        reports.append(
-                            build_artistic_repair_report(
-                                artistic_evaluation
-                            )
-                        )
-
-                    repair_report = (
-                        "\n\n".join(reports)
-                    )
-
-                    repair_extra = (
-                        instrucciones_extra.strip()
-                    )
-
-                    if repair_extra:
-                        repair_extra += "\n\n"
-
-                    repair_extra += (
-                        "MANDATORY QUALITY REPAIR REPORT:\n\n"
-                        + repair_report
-                        + "\n\n"
-                        + "This report has priority. "
-                        + "Preserve the strong sections, "
-                        + "but fix every listed problem."
-                    )
-
-
-                    with st.spinner(
-                        f"🛠️ Reparación automática "
-                        f"{repair_attempts} de "
-                        f"{MAX_REPAIR_ATTEMPTS}..."
-                    ):
-
-                        repair_prompt = (
-                            build_timba_reviewer_prompt(
-                                topic=tema,
-                                mood=caracter,
-                                director_plan=director_text,
-                                draft_lyrics=letra_actual,
-                                extra_instructions=repair_extra,
-                            )
-                        )
-
-                        repair_response = (
-                            model.generate_content(
-                                repair_prompt
-                            )
-                        )
-
-                        repaired_text = (
-                            repair_response.text
-                        )
-
-                        letra_reparada = extraer_letra(
-                            repaired_text,
-                            "FINAL_LYRICS",
-                        )
-
-                        if not letra_reparada:
-                            break
-
-                        letra_actual = letra_reparada
-
-                        structural_validation = (
-                            validate_timba_lyrics(
-                                letra_actual,
-                                coro_corto_esperado,
-                            )
-                        )
-
-                        (
-                            artistic_evaluation,
-                            artistic_judgment,
-                            artistic_raw,
-                        ) = ejecutar_juez_artistico(
-                            model=model,
-                            topic=tema,
-                            mood=caracter,
-                            director_plan=director_text,
-                            lyrics=letra_actual,
-                            extra_instructions=instrucciones_extra,
-                        )
-
-
-                # ------------------------------------------------
-                # RESULTADO FINAL
-                # ------------------------------------------------
-
-                aprobada = (
-                    structural_validation["passed"]
-                    and artistic_evaluation["passed"]
-                )
-
-                if aprobada:
-                    st.success(
-                        "✅ Timba aprobada por el Control "
-                        "de Calidad y el Juez Artístico."
-                    )
-                else:
-                    st.warning(
-                        "⚠️ La canción terminó las reparaciones "
-                        "automáticas, pero todavía NO alcanzó "
-                        "todos los criterios de aprobación."
-                    )
-
-
-                # ============================================
-                # BANDA
-                # ============================================
-
-                st.subheader(
-                    "🎺 Banda"
-                )
-
-                st.caption(
-                    "Solamente el sonido de la orquesta."
-                )
-
-                st.code(
-                    banda,
-                    language="text",
-                )
-
-
-                # ============================================
-                # VOZ
-                # ============================================
-
-                st.subheader(
-                    "🎤 Voz"
-                )
-
-                st.caption(
-                    "Solamente el cantante y "
-                    "su manera de interpretar."
-                )
-
-                st.code(
-                    voz,
-                    language="text",
-                )
-
-
-                # ============================================
-                # STYLE FINAL
-                # ============================================
-
-                style_final = (
-                    banda.rstrip(" .")
-                    + ". "
-                    + voz.lstrip()
-                )
-
-                st.subheader(
-                    "🎼 Style Final — Copiar en Suno"
-                )
-
-                st.code(
-                    style_final,
-                    language="text",
-                )
-
-
-                # ============================================
-                # PLAN DEL DIRECTOR
-                # ============================================
-
-                with st.expander(
-                    "🧠 Ver decisiones del Director Musical"
-                ):
-
-                    st.markdown(
-                        "### Estructura"
-                    )
-
-                    st.code(
-                        estructura,
-                        language="text",
-                    )
-
-                    st.markdown(
-                        "### Plan de la historia"
-                    )
-
-                    st.code(
-                        historia,
-                        language="text",
-                    )
-
-                    if coro_principal:
-                        st.markdown(
-                            "### Idea del coro principal"
-                        )
-
-                        st.code(
-                            coro_principal,
-                            language="text",
-                        )
-
-                    st.markdown(
-                        "### Coro corto"
-                    )
-
-                    st.code(
-                        coro_corto_esperado,
-                        language="text",
-                    )
-
-
-                # ============================================
-                # JUEZ ARTISTICO
-                # ============================================
-
-                mostrar_juez(
-                    artistic_evaluation=artistic_evaluation,
-                    artistic_judgment=artistic_judgment,
-                    structural_validation=structural_validation,
-                    repair_attempts=repair_attempts,
-                )
-
-
-                # ============================================
-                # LETRA FINAL
-                # ============================================
-
-                if aprobada:
-                    st.subheader(
-                        "📝 Letra Final — Copiar en Suno"
-                    )
-                else:
-                    st.subheader(
-                        "📝 Mejor versión obtenida — NO APROBADA"
-                    )
-
-                st.code(
-                    letra_actual,
-                    language="text",
-                )
-
 
             # ====================================================
             # BALADA - SISTEMA ANTERIOR
@@ -1061,7 +606,6 @@ if st.button(
                 with st.spinner(
                     "Creando la balada..."
                 ):
-
                     prompt = f"""
 Eres un director musical, arreglista y compositor
 especializado en balada romántica latina.
@@ -1151,7 +695,6 @@ LETRA_FINAL:
                     st.subheader(
                         "🎼 Style Prompt — Copiar en Suno"
                     )
-
                     st.code(
                         style_part,
                         language="text",
@@ -1160,7 +703,6 @@ LETRA_FINAL:
                     st.subheader(
                         "📝 Letra — Copiar en Suno"
                     )
-
                     st.code(
                         letra_part,
                         language="text",
@@ -1171,7 +713,6 @@ LETRA_FINAL:
                         "Gemini no devolvió "
                         "el formato esperado."
                     )
-
                     st.code(
                         texto_respuesta,
                         language="text",
