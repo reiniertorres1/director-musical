@@ -407,3 +407,434 @@ not a collection of generic Timba phrases.
 """
 
     return prompt
+    # ============================================================
+# NUEVO SISTEMA DE DOS ETAPAS
+# ============================================================
+
+
+def build_timba_director_prompt(
+    topic,
+    mood="Bailable y sabrosa",
+    extra_instructions=""
+):
+    """
+    ETAPA 1:
+    El Director Musical diseña la canción.
+
+    No escribe todavía la letra completa.
+    Decide banda, voz, estructura narrativa,
+    coros y estrategia musical.
+    """
+
+    arrangement_data = json.dumps(
+        TIMBA_ARRANGEMENT,
+        ensure_ascii=False,
+        indent=2
+    )
+
+    band_data = json.dumps(
+        TIMBA_BAND,
+        ensure_ascii=False,
+        indent=2
+    )
+
+    vocal_data = json.dumps(
+        TIMBA_VOCALS,
+        ensure_ascii=False,
+        indent=2
+    )
+
+    prompt = f"""
+You are the MUSICAL DIRECTOR and ARRANGER
+of an original modern Cuban Timba production.
+
+You are NOT writing the complete lyrics yet.
+
+Your job is to design the song so that another
+specialized songwriter can write the lyrics afterward.
+
+==================================================
+SONG REQUEST
+==================================================
+
+TOPIC:
+{topic}
+
+CHARACTER:
+{mood}
+
+EXTRA INSTRUCTIONS:
+{extra_instructions if extra_instructions else "None"}
+
+==================================================
+ARRANGEMENT
+==================================================
+
+TIME SIGNATURE:
+{TIME_SIGNATURE}
+
+TOTAL:
+{TOTAL_BARS} bars
+
+{arrangement_data}
+
+==================================================
+BAND
+==================================================
+
+{band_data}
+
+==================================================
+VOICE
+==================================================
+
+{vocal_data}
+
+==================================================
+YOUR JOB
+==================================================
+
+Create the musical and lyrical BLUEPRINT.
+
+Do NOT write the full song.
+
+The blueprint must solve these things BEFORE
+the songwriter starts writing:
+
+1. What is the exact dramatic idea of the song?
+
+2. How does the story progress from beginning
+   to end?
+
+3. What should Verse 1 accomplish?
+
+4. What should Verse 2 accomplish?
+
+5. What is the function of the bridge?
+
+6. What happens emotionally when the montuno begins?
+
+7. What should the singer talk about during
+   the soneos?
+
+8. What should happen during the final coro?
+
+9. Create the MAIN CORO concept.
+
+10. Create the SHORT CORO used during:
+    3 bars singer + 1 bar coro x 7.
+
+The short coro must be extremely concise.
+
+==================================================
+IMPORTANT LYRIC STRATEGY
+==================================================
+
+Avoid generic Latin-music ideas.
+
+Do NOT build the concept around phrases such as:
+
+- puro sabor
+- que se prenda la fiesta
+- mi destino es bailar
+- fuego
+- candela
+- sigue tu camino
+- la vida sigue
+- que suenen los tambores
+
+The personality must come from:
+
+- wit
+- conversational Cuban attitude
+- irony
+- double meaning
+- everyday situations
+- clever responses
+- believable human reactions
+
+The story must be specific enough that the
+songwriter has real material to work with.
+
+==================================================
+BAND STYLE
+==================================================
+
+Write one compact Suno-ready BAND description.
+
+Maximum about 55 words.
+
+No singer description.
+
+No essays.
+
+==================================================
+VOCAL STYLE
+==================================================
+
+Write one compact Suno-ready VOCAL description.
+
+Maximum about 40 words.
+
+No band description.
+
+==================================================
+OUTPUT FORMAT
+==================================================
+
+Return EXACTLY these sections:
+
+=== BAND_STYLE ===
+
+=== VOCAL_STYLE ===
+
+=== SONG_STRUCTURE ===
+
+=== STORY_BLUEPRINT ===
+
+=== MAIN_CORO_IDEA ===
+
+=== SHORT_CORO ===
+
+Nothing else.
+
+
+SONG_STRUCTURE:
+
+Use one line for every arrangement section
+and include the number of bars.
+
+
+STORY_BLUEPRINT:
+
+Explain concisely what lyrical job each major
+vocal section must accomplish.
+
+Do not write full verses.
+
+
+MAIN_CORO_IDEA:
+
+Give the central hook idea and optionally
+2 or 3 candidate hook phrases.
+
+Do NOT write an entire song.
+
+
+SHORT_CORO:
+
+Write exactly ONE short Spanish coro response.
+
+It must be suitable for the recurring
+1-bar coro section.
+
+Keep it concise, rhythmic and memorable.
+"""
+
+    return prompt
+
+
+
+def build_timba_composer_prompt(
+    topic,
+    mood,
+    director_plan,
+    extra_instructions=""
+):
+    """
+    ETAPA 2:
+    El Compositor recibe las decisiones
+    del Director Musical y escribe la letra.
+    """
+
+    arrangement_data = json.dumps(
+        TIMBA_ARRANGEMENT,
+        ensure_ascii=False,
+        indent=2
+    )
+
+    lyrics_data = json.dumps(
+        TIMBA_LYRICS,
+        ensure_ascii=False,
+        indent=2
+    )
+
+    prompt = f"""
+You are now the SONGWRITER.
+
+A separate musical director has already designed
+the song.
+
+Your job is NOT to redesign it.
+
+Your job is to write an excellent original
+Spanish lyric that follows the director's plan.
+
+==================================================
+ORIGINAL REQUEST
+==================================================
+
+TOPIC:
+{topic}
+
+CHARACTER:
+{mood}
+
+EXTRA INSTRUCTIONS:
+{extra_instructions if extra_instructions else "None"}
+
+==================================================
+DIRECTOR'S BLUEPRINT
+==================================================
+
+{director_plan}
+
+==================================================
+ARRANGEMENT
+==================================================
+
+{arrangement_data}
+
+==================================================
+LYRIC RULES
+==================================================
+
+{lyrics_data}
+
+==================================================
+CRITICAL RULE
+==================================================
+
+Follow the Director's dramatic plan.
+
+Do not replace the central idea with generic
+Timba or party lyrics.
+
+Every sung line must have a reason to exist.
+
+==================================================
+NATURAL CUBAN WRITING
+==================================================
+
+Write natural contemporary Cuban Spanish.
+
+The lyric should sound conversational and musical.
+
+Use wit, irony, picardía and everyday language
+when appropriate.
+
+Do NOT exaggerate Cuban slang.
+
+Do NOT write a caricature.
+
+Avoid generic AI poetry.
+
+Avoid decorative metaphors unless they are
+genuinely clever and natural.
+
+==================================================
+COROS
+==================================================
+
+Use the director's MAIN CORO concept.
+
+You may refine its wording to improve rhythm.
+
+The main coro must be memorable and easy to repeat.
+
+For the:
+
+3 bars singer
++
+1 bar coro
+x 7
+
+use EXACTLY the SHORT CORO selected by the director.
+
+Do not change that short response between soneos.
+
+==================================================
+SEVEN SHORT SONEOS
+==================================================
+
+Create exactly 7 different short soneos.
+
+Each must:
+
+- introduce a different thought
+- relate directly to the story
+- sound spontaneous
+- finish cleanly before the coro
+- avoid repeating the previous idea
+
+Possible functions:
+
+- expose another lie
+- make fun of an excuse
+- answer the coro
+- reveal a detail
+- challenge the other person
+- make an ironic observation
+- escalate the situation
+
+Do not simply change synonyms.
+
+==================================================
+FORMATTING
+==================================================
+
+Use bracket labels.
+
+GOOD:
+
+[Introduccion - 16 bars - Songo instrumental]
+
+[Coro Inicial - 16 bars]
+
+[Voz 1 - 8 bars]
+
+[Mambo 1 - 16 bars]
+
+[Soneo Corto - 28 bars]
+
+[Coda - 4 bars]
+
+Instrumental sections contain ONLY
+their bracket label.
+
+Never write:
+
+(Instrumental...)
+(Band enters...)
+(Brass builds...)
+
+Do not use production explanations in parentheses.
+
+Do not write:
+
+Cantante:
+Coro:
+Guía:
+
+Instead use clean section labels.
+
+Every sung phrase must appear on its own line.
+
+==================================================
+FINAL OUTPUT
+==================================================
+
+Return ONLY:
+
+=== LYRICS ===
+
+followed by the complete original lyric.
+
+No explanations.
+
+No Markdown code fences.
+
+No commentary before or after the lyrics.
+"""
+
+    return prompt
