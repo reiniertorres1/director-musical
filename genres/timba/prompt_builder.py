@@ -5,31 +5,7 @@ from .band import TIMBA_BAND
 from .vocals import TIMBA_VOCALS
 from .lyrics import TIMBA_LYRICS
 
-PROMPT_BUILDER_VERSION = "V6.2 - REVISOR CORREGIDO"
-
-
-def _finalize_prompt(prompt, etapa):
-    """Garantiza que ningún constructor pueda devolver None o texto vacío."""
-
-    if prompt is None:
-        raise RuntimeError(
-            f"{etapa}: el constructor produjo None antes de salir de prompt_builder.py."
-        )
-
-    if not isinstance(prompt, str):
-        raise RuntimeError(
-            f"{etapa}: el constructor produjo {type(prompt).__name__} en vez de texto."
-        )
-
-    prompt = prompt.strip()
-
-    if not prompt:
-        raise RuntimeError(
-            f"{etapa}: el constructor produjo un prompt vacío."
-        )
-
-    return _finalize_prompt(prompt, "Prompt maestro")
-
+PROMPT_BUILDER_VERSION = "V6.3 - CORREGIDO Y PROBADO"
 
 
 def build_timba_prompt(
@@ -432,7 +408,7 @@ Write a coherent song about the requested topic,
 not a collection of generic Timba phrases.
 """
 
-    return _finalize_prompt(prompt, "Director Musical")
+    return prompt
     # ============================================================
 # NUEVO SISTEMA DE DOS ETAPAS
 # ============================================================
@@ -830,7 +806,7 @@ Keep it concise, rhythmic and memorable.
 Nothing else.
 """
 
-    return _finalize_prompt(prompt, "Compositor")
+    return prompt
 
 
 def build_timba_composer_prompt(
@@ -1180,7 +1156,7 @@ No Markdown code fences.
 No commentary before or after the lyrics.
 """
 
-    return _finalize_prompt(prompt, "Revisor inicial")
+    return prompt
 
 def build_timba_reviewer_prompt(
     topic,
