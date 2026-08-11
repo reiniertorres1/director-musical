@@ -2,13 +2,15 @@ import re
 import streamlit as st
 import google.generativeai as genai
 
-APP_VERSION = "TIMBA V5 — JUEZ ARTÍSTICO + COSTOS"
+APP_VERSION = "TIMBA V6 — VOZ + BANDA CONTROLADAS + JUEZ + COSTOS"
 
 # ============================================================
 # MOTOR DE TIMBA - DIRECTOR + COMPOSITOR + REVISOR + JUEZ
 # ============================================================
 
 from genres.timba.prompt_builder import (
+    build_timba_band_style,
+    build_timba_vocal_style,
     build_timba_director_prompt,
     build_timba_composer_prompt,
     build_timba_reviewer_prompt,
@@ -831,11 +833,20 @@ if st.button(
                     )
 
 
+                # ------------------------------------------------
+                # VOZ Y BANDA CONTROLADAS POR PYTHON
+                # ------------------------------------------------
+                #
+                # Gemini ya NO resume ni reescribe estos estilos.
+                # Se mantienen estables entre generaciones.
+
+                banda = build_timba_band_style()
+                voz = build_timba_vocal_style()
+
+
                 director_sections = separar_secciones(
                     director_text,
                     [
-                        "BAND_STYLE",
-                        "VOCAL_STYLE",
                         "SONG_STRUCTURE",
                         "STORY_BLUEPRINT",
                         "MAIN_CORO_IDEA",
@@ -843,16 +854,6 @@ if st.button(
                     ],
                 )
 
-
-                banda = director_sections.get(
-                    "BAND_STYLE",
-                    "",
-                )
-
-                voz = director_sections.get(
-                    "VOCAL_STYLE",
-                    "",
-                )
 
                 estructura = director_sections.get(
                     "SONG_STRUCTURE",
@@ -884,9 +885,7 @@ if st.button(
                 # ------------------------------------------------
 
                 if not (
-                    banda
-                    and voz
-                    and estructura
+                    estructura
                     and historia
                     and coro_corto_esperado
                 ):
@@ -1180,7 +1179,8 @@ if st.button(
                 )
 
                 st.caption(
-                    "Solamente el sonido de la orquesta."
+                    "Style de banda fijo y controlado por Python; "
+                    "Gemini no lo resume."
                 )
 
                 st.code(
@@ -1198,8 +1198,8 @@ if st.button(
                 )
 
                 st.caption(
-                    "Solamente el cantante y "
-                    "su manera de interpretar."
+                    "Style vocal fijo y controlado por Python; "
+                    "Gemini no lo resume."
                 )
 
                 st.code(
